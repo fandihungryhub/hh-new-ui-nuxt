@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "@afif_hh/ui_components": "^1.0.26",
+    "@afif_hh/web-toolkit": "^0.0.35",
+    "@nuxtjs/tailwindcss": "5.0.3",
+    "lodash-es": "^4.17.21",
+    "nanoid": "^3.3.3"
+  },
+  "devDependencies": {
+    "nuxt": "3.0.0-rc.1",
+    "prettier": "^2.6.2",
+    "ts-essentials": "^9.1.2"
+  }
+}

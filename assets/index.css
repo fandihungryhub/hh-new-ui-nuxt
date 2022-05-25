@@ -1,0 +1,3 @@
+.icon-placeholder{
+  @apply w-1 h-1 mr-2 bg-gray-400 rounded-full;
+}
