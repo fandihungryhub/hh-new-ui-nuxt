@@ -1,5 +1,6 @@
 {
   "private": true,
+  "version": "1.0.0",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -8,16 +9,37 @@
     "hh-install": "npm install @afif_hh/ui_components@latest @afif_hh/web-toolkit@latest"
   },
   "dependencies": {
-    "@afif_hh/ui_components": "^1.0.28",
+    "@afif_hh/ui_components": "^1.0.30",
     "@afif_hh/web-toolkit": "^0.0.36",
     "@nuxtjs/tailwindcss": "5.0.3",
+    "@pinia/nuxt": "^0.3.0",
+    "daisyui": "^2.19.0",
+    "humps": "^2.0.1",
+    "ky": "^0.31.1",
+    "ky-universal": "^0.10.1",
     "lodash-es": "^4.17.21",
-    "nanoid": "^3.3.3"
+    "nanoid": "^3.3.3",
+    "pinia": "^2.0.16",
+    "qs": "^6.11.0",
+    "rollbar": "^2.25.0"
   },
   "devDependencies": {
+    "@iconify-json/ri": "^1.1.3",
     "@intlify/nuxt3": "^0.1.10",
+    "@types/humps": "^2.0.2",
+    "@types/lodash-es": "^4.17.6",
+    "@types/qs": "^6.9.7",
+    "@typescript-eslint/eslint-plugin": "~5.17.0",
+    "@typescript-eslint/parser": "~5.17.0",
+    "eslint": "~8.6.0",
+    "eslint-config-prettier": "~8.3.0",
+    "eslint-plugin-nuxt": "^3.2.0",
+    "eslint-plugin-vue": "^9.2.0",
     "nuxt": "npm:nuxt3@3.0.0-rc.3-27545866.cd37a21",
     "prettier": "^2.6.2",
-    "ts-essentials": "^9.1.2"
+    "ts-essentials": "^9.1.2",
+    "typescript": "^4.7.4",
+    "unplugin-icons": "^0.14.7",
+    "vue-eslint-parser": "^9.0.3"
   }
 }
