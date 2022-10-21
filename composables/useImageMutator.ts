@@ -1,4 +1,4 @@
-import imageMutator from "@/services/common/imageMutator";
+import imageMutator from "~/services/common/imageMutator";
 
 function useImageMutator({
   image,

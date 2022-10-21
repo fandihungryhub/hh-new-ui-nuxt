@@ -1,4 +1,4 @@
-import { isClient } from "@/helpers/env";
+import { isClient } from "~/helpers/env";
 
 export function isHDScreen() {
   if (!isClient) {

@@ -1,18 +1,21 @@
-import ky, { HTTPError } from "ky-universal";
-import type { Options, SearchParamsOption } from "ky";
 import humps from "humps";
 import qs from "qs";
+import { API_BASE_URL, API_DOMAIN, API_MAJOR_VERSION } from "../constants";
+import { isContainQueryString } from "~/helpers/url";
+import { $fetch, FetchOptions } from "ohmyfetch";
+import { useLang } from "~/composables/state/lang";
 
 type paramConfig = {
   url: string;
   method?: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
-  headers?: SearchParamsOption;
+  headers?: Record<string, unknown>;
   data?: Record<string, unknown>;
   params?: Record<string, unknown>;
   canRetry?: boolean;
   canCancel?: boolean;
   withCredentials?: boolean;
   lang?: string;
+  clientType?: string;
 };
 
 type State = {
@@ -35,24 +38,26 @@ async function useHttp(paramConfig: paramConfig): Promise<State> {
   };
 
   try {
+    const usedLang = useLang().value;
     const DEFAULT_HEADERS = {
       "Content-Type": "application/json",
-      "X-HH-Language": paramConfig.lang || "th",
+      "X-HH-Language": paramConfig.lang || usedLang,
     };
     const REQUIRED_PARAMS = {
-      client_type: "web",
+      client_type: paramConfig.clientType || "web",
     };
 
-    const options: Options = {
+    const options: FetchOptions = {
       method: paramConfig.method || "GET",
       headers: DEFAULT_HEADERS,
+      baseURL: `${API_DOMAIN}/${API_BASE_URL}/${API_MAJOR_VERSION}`,
     };
 
     if (paramConfig.data) {
-      options.json = humps.decamelizeKeys(paramConfig.data);
+      options.body = JSON.stringify(humps.decamelizeKeys(paramConfig.data));
     }
 
-    const isURLContainQueryString = paramConfig.url.includes("?")
+    const isURLContainQueryString = isContainQueryString(paramConfig.url)
       ? true
       : false;
 
@@ -75,24 +80,28 @@ async function useHttp(paramConfig: paramConfig): Promise<State> {
           ...paramConfig.params,
         });
       }
-      options.searchParams = new URLSearchParams(parsedParams);
+      const finalSearchParams = new URLSearchParams(parsedParams).toString();
+      paramConfig.url = `${paramConfig.url}?${finalSearchParams}`;
     }
 
-    const response = await ky(paramConfig.url, options);
-    const responseJson = await response.json();
-    state.data = humps.camelizeKeys(responseJson);
+    const response = await $fetch.raw(paramConfig.url, options);
+    const responseData = response._data;
+    state.data = humps.camelizeKeys(responseData);
     state.httpStatus = response.status;
   } catch (err) {
-    if (err instanceof HTTPError) {
-      const { status } = err.response;
-      const jsonVal = await err.response.json();
-      state.httpStatus = status;
-      state.error.message = jsonVal.message;
-      state.error.detail = err;
-    } else {
-      state.error.detail = err;
-      state.error.message = "Something went wrong when setup http call";
-    }
+    console.log("USEHTTP ERR", err);
+    state.error.detail = err;
+    state.error.message = "Something went wrong when setup http call";
+    // if (err instanceof HTTPError) {
+    //   const { status } = err.response;
+    //   const jsonVal = await err.response.json();
+    //   state.httpStatus = status;
+    //   state.error.message = jsonVal.message;
+    //   state.error.detail = err;
+    // } else {
+    //   state.error.detail = err;
+    //   state.error.message = "Something went wrong when setup http call";
+    // }
   }
   return state;
 }

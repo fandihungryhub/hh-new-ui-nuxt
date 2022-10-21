@@ -1,0 +1,15 @@
+{
+  "new": "ใหม่",
+  "book": "จองโต๊ะ",
+  "branch_one": "สาขา",
+  "branch_other": "สาขา",
+  "review_one": "รีวิว",
+  "review_other": "รีวิว",
+  "netPerson": "ราคาสุทธิ/ท่าน",
+  "netSet": "ราคาสุทธิ/เซ็ต",
+  "rating_one": "{count} รีวิว",
+  "rating_other": "{count} รีวิว",
+  "viewOtherBranch": "ดูสาขาอื่น",
+  "acceptVoucher": "รับเวาเชอร์",
+  "calculateDeliveryFee": "calculate delivery fee"
+}

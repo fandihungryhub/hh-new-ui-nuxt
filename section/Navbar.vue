@@ -3,7 +3,7 @@
     <div class="container py-2 mx-auto">
       <div class="flex items-center">
         <img
-          src="@/assets/image/logo-new-full.png"
+          src="~/assets/image/logo-new-full.png"
           width="90"
           height="50"
           alt="hh logo"

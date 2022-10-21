@@ -1,0 +1,30 @@
+.max-width {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.custom-dropdown {
+  @apply pl-1;
+}
+
+.custom-dropdown select {
+  /* Hide default arrow */
+  appearance: none;
+  width: 100%;
+  padding: 0 25px 0 10px;
+
+  @apply h-full bg-white;
+  position: relative;
+  background: url("~~/assets/icon-arrow-down-red.png") 90% 8px no-repeat;
+  background-size: 13px auto;
+}
+
+.notyf__toast{
+  border-radius: 5px;
+}
+
+.notyf__wrapper{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

@@ -6,140 +6,149 @@
       :srcset="imageSource.source"
       :media="imageSource.mediaQuery"
     />
-    <img :src="src" :alt="alt" />
+    <img
+      v-bind="$attrs"
+      :src="parsedSrc"
+      :alt="alt"
+      :width="widthInNumber"
+      loading="lazy"
+    />
   </picture>
 </template>
 
 <script lang="ts" setup>
-import { PropType } from "vue";
+import type { PropType } from "vue";
+import useImageMutator from "~/composables/useImageMutator";
+import { isContainHttp } from "~/helpers/url";
+import { generateSourceMediaQuery } from "~/helpers/image";
 
 // scenario
 // 1. local image can pass retina version
 // 2. external image can provide single src then use image service to generete webp and retina
 
-type SrcSet = {
+export type SrcSet = {
   source: string;
   format?: string;
   breakpoint?: {
-    minWidth: number;
-    maxWidth: number;
+    minWidth?: number;
+    maxWidth?: number;
   };
+  width?: number;
+  height?: number;
   pixelDensity?: string;
   useMutator?: boolean;
 };
 
 const props = defineProps({
-  isLocal: {
-    type: Boolean,
-    default: false,
-  },
   alt: {
     type: String,
     default: "",
+    required: false,
   },
   sources: {
     type: Array as PropType<SrcSet[]>,
     default: [],
+    required: false,
   },
   src: {
     type: String,
     required: true,
   },
   width: {
-    type: String,
+    type: [String, Number],
     required: true,
+  },
+  height: {
+    type: String,
+    default: "",
+  },
+  useMutator: {
+    type: Boolean,
+    default: true,
   },
 });
 
-const { isLocal, sources, width, src } = props;
-const widthInNumber = typeof width === "string" ? parseInt(width) : 0;
-const imageSources: {
+type ImageSources = {
   format: string | undefined;
   mediaQuery: string | undefined;
   source: string | undefined;
-}[] = [];
+}[];
 
-function generateMediaQuery(maxWidth: number, minWidth: number) {
-  if (!maxWidth && !minWidth) {
-    return undefined;
-  }
-  return maxWidth ? `(max-width: ${maxWidth})` : `(min-width: ${minWidth})`;
-}
+const { sources, width, src, height, useMutator } = props;
+const widthInNumber =
+  typeof width === "string"
+    ? parseInt(width)
+    : typeof width === "number"
+    ? width
+    : 0;
+const heightInNumber =
+  typeof height === "string" && height.length
+    ? parseInt(height)
+    : typeof height === "number"
+    ? height
+    : 0;
+const imageSources: ImageSources = [];
 
-function genereteSrcSet({
-  mutatorOption,
-  src,
-}: {
-  mutatorOption?: { width: number; format?: string };
-  src: string;
-}) {
-  if (!src) {
-    return "";
-  }
-  if (mutatorOption) {
-    return generateImageURL({
-      width: mutatorOption.width,
-      isWebp: mutatorOption.format === "webp",
-      image: src,
-    });
-  }
-  return src;
-}
+const isLocal = isContainHttp(src) ? false : true;
+const parsedSrc = isLocal ? src : src;
 
-function generateImageURL({
-  width,
-  isWebp,
-  image,
-  isEnlarge = false,
-}: {
-  width: number;
-  isWebp: boolean;
-  image: string;
-  isEnlarge?: boolean;
-}) {
-  return useImageMutator({
-    image,
-    width,
-    height: 0,
-    isWebp: isWebp,
-    isEnlarge,
+function generateDefaultPreset() {
+  const sources: ImageSources = [];
+
+  const retinaImg = useImageMutator({
+    image: src,
+    width: widthInNumber * 2,
+    height: heightInNumber * 2,
+    isWebp: true,
   });
-}
 
-function generateDefaultWebp() {
-  const webpImage = genereteSrcSet({
-    mutatorOption: { width: widthInNumber, format: "webp" },
-    src: src,
+  sources.push({
+    format: undefined,
+    mediaQuery: undefined,
+    source: retinaImg,
   });
-  const webpImageRetina = genereteSrcSet({
-    mutatorOption: { width: widthInNumber * 2, format: "webp" },
-    src: src,
+
+  const webpImage = useImageMutator({
+    image: src,
+    width: widthInNumber,
+    height: heightInNumber,
+    isWebp: true,
   });
+  const webpImageRetina = useImageMutator({
+    image: src,
+    width: widthInNumber * 2,
+    height: heightInNumber * 2,
+    isWebp: true,
+  });
+
   const finalImgSrc = `${webpImage} 1x, ${webpImageRetina} 2x`;
-  return {
+  sources.push({
     format: "image/webp",
     mediaQuery: undefined,
     source: finalImgSrc,
-  };
+  });
+
+  return sources;
 }
 
 function init() {
-  if (Array.isArray(sources)) {
+  if (Array.isArray(sources) && sources.length) {
     sources.forEach((imgSource) => {
-      const usedWidth =
-        imgSource.breakpoint?.maxWidth || imgSource.breakpoint?.minWidth || 0;
+      const usedWidth = imgSource.width || 0;
       imageSources.push({
         format: imgSource.format ? `image/${imgSource.format}` : undefined,
         mediaQuery: imgSource.breakpoint
-          ? generateMediaQuery(
-              imgSource.breakpoint.maxWidth,
-              imgSource.breakpoint.minWidth
-            )
+          ? generateSourceMediaQuery({
+              maxWidth: imgSource.breakpoint.maxWidth,
+              minWidth: imgSource.breakpoint.minWidth,
+            })
           : undefined,
         source: imgSource.useMutator
-          ? genereteSrcSet({
-              mutatorOption: { width: usedWidth, format: imgSource.format },
-              src: imgSource.source,
+          ? useImageMutator({
+              width: usedWidth,
+              height: imgSource.height || 0,
+              isWebp: imgSource.format === "webp",
+              image: imgSource.source,
             })
           : imgSource.source,
       });
@@ -148,10 +157,21 @@ function init() {
   }
   // for use case #2
   if (!isLocal) {
-    imageSources.push(generateDefaultWebp());
-    return;
+    if (useMutator) {
+      const generateDefault = generateDefaultPreset();
+      generateDefault.forEach((source) => {
+        imageSources.push(source);
+      });
+      return;
+    }
   }
 }
 
 init();
+</script>
+
+<script lang="ts">
+export default {
+  name: "HhImage",
+};
 </script>

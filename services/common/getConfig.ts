@@ -1,5 +1,5 @@
 import { useHttp } from "#imports";
-import { API_BASE_URL, API_MAJOR_VERSION } from "@/constants";
+import { API_BASE_URL, API_MAJOR_VERSION } from "~/constants";
 import { useReport } from "~/composables/report/useReport";
 
 export interface APIResponse {

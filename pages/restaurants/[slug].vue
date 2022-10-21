@@ -16,13 +16,13 @@
     ></RestaurantHeader>
     <ClientOnly>
       <!-- <div>AAA ONLY CLIENT</div> -->
-      <PackageCard v-bind="dummyPack"></PackageCard>
+      <!-- <PackageCard v-bind="dummyPack"></PackageCard>
       <PackageDescription
         name="desc"
         time-limit="2 hours"
         :min-pax="1"
         :max-pax="5"
-      ></PackageDescription>
+      ></PackageDescription> -->
       {{ $t("hello") }}
       <button class="bg-blue-500" @click="$i18n.locale = 'th'">
         Change TH
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-// import { nanoid } from 'nanoid'
+import { onMounted, useRoute } from "#imports";
 import {
   getRestaurantBySlug,
   getRestaurantPackages,
@@ -133,6 +133,7 @@ await getRestaurantData();
 </script>
 
 <script lang="ts">
+import { defineComponent } from "#imports";
 import { PackageCard } from "@afif_hh/ui_components";
 defineComponent({
   components: {
