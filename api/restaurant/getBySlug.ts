@@ -129,7 +129,7 @@ export async function getRestaurantBySlug({
   if (isEmpty(response) || isEmpty(response.data)) {
     return {
       isSuccess: false,
-      message: defaultErrorMessage,
+      message: `${defaultErrorMessage} ${response}`,
       data: null,
     };
   }
