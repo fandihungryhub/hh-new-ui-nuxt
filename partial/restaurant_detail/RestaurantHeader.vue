@@ -77,7 +77,7 @@
         />
 
         <!-- restaurant featured image -->
-        <RestaurantFeaturedImage v-if="featuredImages">
+        <RestaurantFeaturedImage v-if="parsedFeaturedImages.length">
           <template #first-image>
             <HhImage
               :src="parsedFeaturedImages[0].src"
