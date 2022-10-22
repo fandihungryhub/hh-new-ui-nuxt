@@ -1,9 +1,10 @@
 import humps from "humps";
 import qs from "qs";
-import { API_BASE_URL, API_DOMAIN, API_MAJOR_VERSION } from "../constants";
+import { API_BASE_URL, API_MAJOR_VERSION } from "../constants";
 import { isContainQueryString } from "~/helpers/url";
 import { $fetch, FetchOptions } from "ohmyfetch";
 import { useLang } from "~/composables/state/lang";
+import { useRuntimeConfig } from "#imports";
 
 type paramConfig = {
   url: string;
@@ -37,6 +38,8 @@ async function useHttp(paramConfig: paramConfig): Promise<State> {
     },
   };
 
+  const config = useRuntimeConfig();
+
   try {
     const usedLang = useLang().value;
     const DEFAULT_HEADERS = {
@@ -50,7 +53,7 @@ async function useHttp(paramConfig: paramConfig): Promise<State> {
     const options: FetchOptions = {
       method: paramConfig.method || "GET",
       headers: DEFAULT_HEADERS,
-      baseURL: `${API_DOMAIN}/${API_BASE_URL}/${API_MAJOR_VERSION}`,
+      baseURL: `${config.apiDomain}/${API_BASE_URL}/${API_MAJOR_VERSION}`,
     };
 
     if (paramConfig.data) {
