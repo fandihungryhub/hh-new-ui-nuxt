@@ -2,7 +2,9 @@ import { defineNuxtConfig } from "nuxt/config";
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   runtimeConfig: {
-    apiDomain: process.env.NUXT_API_DOMAIN,
+    public: {
+      apiDomain: process.env.NUXT_PUBLIC_API_DOMAIN,
+    },
   },
   typescript: {
     shim: false,

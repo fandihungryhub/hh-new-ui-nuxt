@@ -4,7 +4,7 @@ import { API_BASE_URL, API_MAJOR_VERSION } from "../constants";
 import { isContainQueryString } from "~/helpers/url";
 import { $fetch, FetchOptions } from "ohmyfetch";
 import { useLang } from "~/composables/state/lang";
-// import { useRuntimeConfig } from "#imports";
+import { useRuntimeConfig } from "#imports";
 
 type paramConfig = {
   url: string;
@@ -38,7 +38,7 @@ async function useHttp(paramConfig: paramConfig): Promise<State> {
     },
   };
 
-  // const config = useRuntimeConfig();
+  const config = useRuntimeConfig();
 
   try {
     const usedLang = useLang().value;
@@ -53,7 +53,7 @@ async function useHttp(paramConfig: paramConfig): Promise<State> {
     const options: FetchOptions = {
       method: paramConfig.method || "GET",
       headers: DEFAULT_HEADERS,
-      baseURL: `https://hungryhub.com/${API_BASE_URL}/${API_MAJOR_VERSION}`,
+      baseURL: `${config.public.apiDomain}/${API_BASE_URL}/${API_MAJOR_VERSION}`,
     };
 
     if (paramConfig.data) {
