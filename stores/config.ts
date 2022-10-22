@@ -5,6 +5,7 @@ import { DEFAULT_LANG } from "~/constants";
 const useConfigStore = defineStore("config", {
   state: () => {
     return {
+      isLoading: false,
       availableCities: [],
       selectedCity: "Bangkok",
       lang: DEFAULT_LANG,

@@ -35,12 +35,14 @@ import {
   watch,
 } from "vue";
 import MyButtonVue from "~/components/MyButton.vue";
-import { addTranslate, translate } from "~/composables/useTranslate";
 import type { GetBannerAPIResponse } from "~/api/common/banner";
 import { rebuildAssetURL } from "~/helpers/url";
 import { selectedCityHomeDescription, selectedCity } from "~/stores/city";
-import { config, isLoading } from "~/stores/config";
+import useConfigStore from "~/stores/config";
 import { formatThousand } from "~/helpers/string";
+import { storeToRefs } from "pinia";
+const configStore = useConfigStore();
+const { isLoading, backendConfig } = storeToRefs(configStore);
 
 const props = defineProps({
   totalCover: {
@@ -73,7 +75,7 @@ const showedTotalCover = ref(totalCover.value);
 onMounted(async () => {
   watch(isLoading, (newVal) => {
     if (newVal === false) {
-      showedTotalCover.value = formatThousand(config.value.totalCovers);
+      showedTotalCover.value = formatThousand(backendConfig.value.totalCovers);
     }
   });
   const { isSuccess, message, data } = await getBanners(cityId.value);

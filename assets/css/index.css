@@ -16,7 +16,7 @@
 
   @apply h-full bg-white;
   position: relative;
-  background: url("~~/assets/icon-arrow-down-red.png") 90% 8px no-repeat;
+  background: url("~~/assets/image/icon-arrow-down-red.png") 90% 8px no-repeat;
   background-size: 13px auto;
 }
 
