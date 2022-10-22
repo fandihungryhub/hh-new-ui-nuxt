@@ -1,7 +1,6 @@
 <template>
   <div class="container mx-auto">
     {{ message }}
-    {{ restoData }}
     <RestaurantHeader
       :name="restaurant.name"
       :icon="restaurant.icon"
@@ -64,9 +63,6 @@ const restaurant: RestaurantPage = {
   reservationSystemOnly: false,
 };
 const earlyBirdPoint = 100;
-const { data: restoData } = await useFetch(
-  "https://hungryhub.com/api/v5/restaurants/sui-sian-restaurant-the-landmark-bangkok-hotel/slug.json?access_token=rem0aPxU_ysdd7DB751LEkrFjZ__2xIW_7MCDauODqU&client_type=web&include_packages=false&include_pictures=true&minor_version=3&preview_mode=false"
-);
 const { isSuccess, data, message } = await getRestaurantBySlug({
   slug: slug as string,
 });
