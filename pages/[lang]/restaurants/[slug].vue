@@ -1,5 +1,7 @@
 <template>
   <div class="container mx-auto">
+    {{ message }}
+    aksmdak
     <RestaurantHeader
       :name="restaurant.name"
       :icon="restaurant.icon"
