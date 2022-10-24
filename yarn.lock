@@ -415,7 +415,7 @@
     kolorist "^1.5.1"
     local-pkg "^0.4.2"
 
-"@intlify/bundle-utils@next":
+"@intlify/bundle-utils@^3.2.1", "@intlify/bundle-utils@next":
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/@intlify/bundle-utils/-/bundle-utils-3.2.1.tgz#f1a00fb31716567c8da63fbb351c3199ca12d467"
   integrity sha512-rf4cLBOnbqmpXVcCdcYHilZpMt1m82syh3WLBJlZvGxN2KkH9HeHVH4+bnibF/SDXCHNh6lM6wTpS/qw+PkcMg==
@@ -483,6 +483,24 @@
   version "9.3.0-beta.6"
   resolved "https://registry.yarnpkg.com/@intlify/shared/-/shared-9.3.0-beta.6.tgz#0f79e96f6f278d55ad0206def25f1335b219decc"
   integrity sha512-ITA1R4tvJYwZXT5x6QCSwxcwQ4dU52zrzVm/EUbgsp8oWzYS1xexBrxyNM80PSQudYvL2rvcZJKQ7yBh7b0LkQ==
+
+"@intlify/unplugin-vue-i18n@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@intlify/unplugin-vue-i18n/-/unplugin-vue-i18n-0.7.0.tgz#10ebcf634921da9661c7a5880a5d0d6844773a00"
+  integrity sha512-FmkQQdTsKINH9KqeKYxOlumxBLD0v6TAMac3+4iqmFTyqqE1pH5Seqta0QQBSAgsJXzsbASkEnHdlsoCC2DfNA==
+  dependencies:
+    "@intlify/bundle-utils" "^3.2.1"
+    "@intlify/shared" next
+    "@rollup/pluginutils" "^4.2.0"
+    "@vue/compiler-sfc" "^3.2.23"
+    debug "^4.3.1"
+    fast-glob "^3.2.5"
+    js-yaml "^4.1.0"
+    json5 "^2.2.0"
+    pathe "^0.2.0"
+    picocolors "^1.0.0"
+    source-map "0.6.1"
+    unplugin "^0.8.0"
 
 "@intlify/vite-plugin-vue-i18n@4.0.0":
   version "4.0.0"
@@ -841,7 +859,7 @@
   resolved "https://registry.yarnpkg.com/@rollup/plugin-wasm/-/plugin-wasm-6.0.0.tgz#6d0937a6604eb3c9103cb22c7bff785e2110ec63"
   integrity sha512-pIwyNMMcyEoLpiWiMgKVh7YPbe/6N9ifEUvn1jfzwx7U66YuG7cVAniZK+OzPSc3kyfJ/EF9J8rsg4/drBz+NA==
 
-"@rollup/pluginutils@^4.1.0", "@rollup/pluginutils@^4.2.1":
+"@rollup/pluginutils@^4.1.0", "@rollup/pluginutils@^4.2.0", "@rollup/pluginutils@^4.2.1":
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-4.2.1.tgz#e6c6c3aba0744edce3fb2074922d3776c0af2a6d"
   integrity sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==
@@ -1075,7 +1093,7 @@
     "@vue/compiler-core" "3.2.41"
     "@vue/shared" "3.2.41"
 
-"@vue/compiler-sfc@3.2.41":
+"@vue/compiler-sfc@3.2.41", "@vue/compiler-sfc@^3.2.23":
   version "3.2.41"
   resolved "https://registry.yarnpkg.com/@vue/compiler-sfc/-/compiler-sfc-3.2.41.tgz#238fb8c48318408c856748f4116aff8cc1dc2a73"
   integrity sha512-+1P2m5kxOeaxVmJNXnBskAn3BenbTmbxBxWOtBq3mQTCokIreuMULFantBUclP0+KnzNCMOvcnKinqQZmiOF8w==
@@ -5868,6 +5886,16 @@ unplugin@^0.6.2:
     webpack-sources "^3.2.3"
     webpack-virtual-modules "^0.4.3"
 
+unplugin@^0.8.0:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/unplugin/-/unplugin-0.8.1.tgz#4517b6a8ec3d944e838f9c346921d9777cd159e1"
+  integrity sha512-o7rUZoPLG1fH4LKinWgb77gDtTE6mw/iry0Pq0Z5UPvZ9+HZ1/4+7fic7t58s8/CGkPrDpGq+RltO+DmswcR4g==
+  dependencies:
+    acorn "^8.8.0"
+    chokidar "^3.5.3"
+    webpack-sources "^3.2.3"
+    webpack-virtual-modules "^0.4.4"
+
 unplugin@^0.9.5, unplugin@^0.9.6:
   version "0.9.6"
   resolved "https://registry.yarnpkg.com/unplugin/-/unplugin-0.9.6.tgz#f449173b619b9970bf3190d5419a66a727bb5d18"
@@ -6102,7 +6130,7 @@ webpack-sources@^3.2.3:
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-3.2.3.tgz#2d4daab8451fd4b240cc27055ff6a0c2ccea0cde"
   integrity sha512-/DyMEOrDgLKKIG0fmvtz+4dUX/3Ghozwgm6iPp8KRhvn+eQf9+Q7GWxVNMk3+uCPWfdXYC4ExGBckIXdFEfH1w==
 
-webpack-virtual-modules@^0.4.3, webpack-virtual-modules@^0.4.5:
+webpack-virtual-modules@^0.4.3, webpack-virtual-modules@^0.4.4, webpack-virtual-modules@^0.4.5:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/webpack-virtual-modules/-/webpack-virtual-modules-0.4.5.tgz#e476842dab5eafb7beb844aa2f747fc12ebbf6ec"
   integrity sha512-8bWq0Iluiv9lVf9YaqWQ9+liNgXSHICm+rg544yRgGYaR8yXZTVBaHZkINZSB2yZSWo4b0F6MIxqJezVfOEAlg==

@@ -4,24 +4,14 @@
     <div class="flex items-center justify-between">
       <a
         class="flex items-center"
-        :href="`/restaurants/search?cuisines[]=${cuisine.id}`"
+        :href="linkSearhByCuisine(cuisine.id)"
         target="_blank"
       >
-        <img
-          class="m-2 ml-0 icon"
-          src="~/assets/image/icon-fork-black.png"
-          alt=""
-          loading="lazy"
-        />
+        <IconFork />
         <span class="underline">{{ cuisine.name }}</span>
       </a>
       <a :href="direction" target="_blank" class="flex items-center">
-        <img
-          class="m-2 ml-0 icon"
-          src="~/assets/image/icon-pin-location-black.png"
-          loading="lazy"
-          alt=""
-        />
+        <IconLocation />
         <span class="underline">{{ location.name }}</span>
       </a>
       <div class="flex items-center">
@@ -32,7 +22,7 @@
           alt=""
         />
         <span class="underline" @click="$emit('on-clock-clicked')">{{
-          openingHoursSummary
+          openingHoursShort
         }}</span>
       </div>
     </div>
@@ -60,15 +50,6 @@
       </button>
     </div>
     <div class="flex justify-between mb-2">
-      <span v-if="lastOrder" class="flex items-center mr-2">
-        <img
-          class="m-2 ml-0 icon"
-          loading="lazy"
-          src="~/assets/image/icon-trend-black.png"
-          alt=""
-        />
-        <span class="text-sm">{{ lastOrder }}</span>
-      </span>
       <span
         v-if="branchId && showViewBranch"
         class="flex items-center"
@@ -101,28 +82,48 @@
 </template>
 
 <script lang="ts" setup>
-type Props = {
-  cuisine: {
-    id: string | number;
-    name: string;
-  };
-  location: {
-    id: string | number;
-    name: string;
-  };
-  showTags: boolean;
-  showViewBranch: boolean;
-  openingHoursSummary: string;
-  branchId: string | number;
-  direction: string;
-  tags: { id: string | number; label: string }[];
-  lastOrder: string;
-  showAcceptVoucher: boolean;
-};
+import { useRestaurantDetail } from "~/stores/restaurantDetail";
+import IconFork from "~/components/icons/IconFork.vue";
+import IconLocation from "~/components/icons/IconLocation.vue";
+import { linkSearhByCuisine } from "~/helpers/restaurant";
+const {
+  reservationSystemOnly,
+  branchId,
+  openingHoursShort,
+  location,
+  cuisine,
+  tags,
+  lastOrder,
+  reviewCount,
+} = useRestaurantDetail().value;
+const showAcceptVoucher = !reservationSystemOnly;
+const showViewBranch = !reservationSystemOnly;
+const showTags = true;
+const direction = "";
+const totalCovers = 1000;
+const earlyReviewPoint = 10;
+
+// type Props = {
+//   cuisine: {
+//     id: string | number;
+//     name: string;
+//   };
+//   location: {
+//     id: string | number;
+//     name: string;
+//   };
+//   showTags: boolean;
+//   showViewBranch: boolean;
+//   openingHoursSummary: string;
+//   branchId: string | number;
+//   direction: string;
+//   tags: { id: string | number; label: string }[];
+//   showAcceptVoucher: boolean;
+// };
 
 defineEmits(["on-clock-clicked", "on-branch-clicked"]);
 
-const props = defineProps<Props>();
+// const props = defineProps<Props>();
 
 function onTagExpanClicked() {}
 </script>

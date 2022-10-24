@@ -1,5 +1,9 @@
 {
   "welcome": "Welcome in EN",
   "pleaseWait": "please wait",
-  "bannerCTA": "More than {total} diners seated, book your table today!"
+  "bannerCTA": "More than {total} diners seated, book your table today!",
+  "firstReview": "First {review} people review, Get {point} hungry vouchers!",
+  "lastReservationCTA": "Trending! Last booking was made {time}",
+  "newRestaurantCTA": "New! Book & review to earn {point} hungry vouchers!",
+  "totalRestaurantBookingCTA": "Popular! Booked by {total} people"
 }

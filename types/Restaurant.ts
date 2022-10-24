@@ -3,7 +3,7 @@ import type { PriceAndPricingType } from "./Pricing";
 export type RestaurantPage = {
   name: string;
   icon: string;
-  bramchId: number;
+  branchId: number;
   openingHoursShort: string;
   reviewCount: number;
   reviewScore: string;
@@ -19,6 +19,9 @@ export type RestaurantPage = {
   tags: { id: number; label: string }[];
   featuredImages: { id: string; caption: string; image: string }[];
   reservationSystemOnly: boolean;
+  vrLink: string;
+  isNewRestaurant: boolean;
+  totalCovers: number;
 };
 
 export interface FeaturedRestaurant {
@@ -75,7 +78,7 @@ export interface FeaturedRestaurant {
 
 export interface Restaurant {
   id: string;
-  type: "restaurants";
+  type: string;
   attributes: RestaurantAttributes;
   relationships: {
     bloggerReviews?: { data: any[] };
@@ -138,7 +141,7 @@ export interface RestaurantAttributes {
   canonicalLink: string;
   lastBookingWasMade: string;
   totalCovers: number;
-  timeSlots: {};
+  timeSlots: Record<string, any>;
   reservationSystemOnly: boolean;
   breadcrumbs: {
     order: number;

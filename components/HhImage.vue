@@ -39,33 +39,17 @@ export type SrcSet = {
   useMutator?: boolean;
 };
 
-const props = defineProps({
-  alt: {
-    type: String,
-    default: "",
-    required: false,
-  },
-  sources: {
-    type: Array as PropType<SrcSet[]>,
-    default: [],
-    required: false,
-  },
-  src: {
-    type: String,
-    required: true,
-  },
-  width: {
-    type: [String, Number],
-    required: true,
-  },
-  height: {
-    type: String,
-    default: "",
-  },
-  useMutator: {
-    type: Boolean,
-    default: true,
-  },
+export type Props = {
+  alt: string;
+  src: string;
+  width: string | number;
+  sources?: SrcSet[];
+  height?: string;
+  useMutator?: boolean;
+};
+
+const props = withDefaults(defineProps<Props>(), {
+  height: "",
 });
 
 type ImageSources = {

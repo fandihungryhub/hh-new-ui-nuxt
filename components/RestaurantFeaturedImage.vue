@@ -1,18 +1,76 @@
 <template>
-  <div class="flex h-[200px] bg-gray-300">
-    <div class="flex-shrink-0 w-1/2">
-      <slot name="first-image"></slot>
-    </div>
-    <div class="flex flex-col w-1/2">
-      <div class="object-contain min-h-[100px]">
-        <slot name="second-image"></slot>
-      </div>
-      <div class="object-contain h-1/2">
-        <slot name="third-image"></slot>
+  <div class="flex flex-wrap">
+    <div
+      v-for="(img, index) in featuredImages"
+      class="relative p-1"
+      :class="index <= 1 ? ' lg:w-1/5 w-1/2' : 'lg:w-1/5 w-1/3'"
+    >
+      <HhImage
+        class="w-full"
+        :sources="img.sources"
+        :src="img.src"
+        :useMutator="true"
+        alt="restaurant image"
+        :width="500"
+      />
+      <div
+        v-if="index === 4 && images.length > maxShowedImages"
+        class="absolute top-0 left-0 flex items-center justify-center w-full h-full text-sm text-white bg-black/40"
+      >
+        {{ `${images.length - maxShowedImages}+` }}
       </div>
     </div>
   </div>
 </template>
+<script lang="ts" setup>
+type Props = {
+  images: { src: string; caption: string }[];
+};
+
+const props = defineProps<Props>();
+const images = Array.isArray(props.images) ? props.images : [];
+const maxShowedImages = images.length < 5 ? 2 : 5;
+const showedImages = images.slice(0, maxShowedImages);
+const featuredImages = showedImages.map((img, index) => {
+  const sources = [
+    {
+      source: img.src,
+      format: "webp",
+      breakpoint: {
+        maxWidth: 375,
+      },
+      width: 175,
+      height: 140,
+      useMutator: true,
+    },
+    {
+      source: img.src,
+      format: "webp",
+      breakpoint: {
+        maxWidth: 768,
+      },
+      width: 384,
+      height: 180,
+      useMutator: true,
+    },
+    {
+      source: img.src,
+      format: "webp",
+      breakpoint: {
+        minWidth: 1024,
+      },
+      width: 300,
+      height: 250,
+      useMutator: true,
+    },
+  ];
+  return {
+    caption: img.caption,
+    src: img.src,
+    sources,
+  };
+});
+</script>
 <script lang="ts">
 export default {
   name: "RestaurantFeaturedImage",

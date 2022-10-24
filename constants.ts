@@ -1,7 +1,7 @@
 export const DEFAULT_LANG = "th";
 export const API_MINOR_VERSION = 3;
 export const API_MAJOR_VERSION = "v5";
-export const API_DOMAIN = process.env.VITE_API_DOMAIN;
+export const API_DOMAIN = import.meta.env.NUXT_PUBLIC_API_DOMAIN;
 export const API_PROVIDER = "hungryhub";
 export const API_BASE_URL = "api";
 export const API_CLIENT_TYPE = "web";

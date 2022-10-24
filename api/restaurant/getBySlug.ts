@@ -2,6 +2,7 @@ import { isEmpty } from "lodash-es";
 import useHttp from "~/composables/useHttp";
 import { API_MINOR_VERSION, DEFAULT_ERROR_MESSAGE } from "~/constants";
 import type { RestaurantAttributes } from "~/types/Restaurant";
+import { restaurant, RestaurantModel } from "~/models/restaurant";
 export interface GetRestaurantBySlug {
   data: Data;
   included: Included[];
@@ -106,7 +107,13 @@ export async function getRestaurantBySlug({
 }): Promise<{
   isSuccess: boolean;
   message: string;
-  data: null | GetRestaurantBySlug;
+  data: null | {
+    data: RestaurantModel;
+    included: Included[];
+    meta: Meta;
+    success: boolean;
+    message: null;
+  };
 }> {
   const defaultErrorMessage = `${DEFAULT_ERROR_MESSAGE}, failed get restaurant data`;
   const url = `/restaurants/${slug}/slug.json`;
@@ -142,9 +149,17 @@ export async function getRestaurantBySlug({
     };
   }
 
+  const restaurantData = restaurant(response.data);
+
   return {
     isSuccess: true,
     message: "",
-    data: response,
+    data: {
+      data: restaurantData,
+      included: response.included,
+      meta: response.meta,
+      message: response.message,
+      success: response.success,
+    },
   };
 }

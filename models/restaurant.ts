@@ -11,7 +11,7 @@ import {
   PACKAGE_CODE_PP,
   PACKAGE_CODE_XP,
 } from "~/constants";
-import { isNewRestaurant } from "~/helpers/restaurant";
+import { isNewRestaurant } from "~/services/restaurant";
 import { rebuildAssetURL } from "~/helpers/url";
 import {
   isArray,
@@ -36,7 +36,7 @@ interface RestaurantModel extends RestaurantAttributes {
   id: string;
 }
 
-function featuredResturant(param: FeaturedRestaurant) {
+function featuredResturant(param: FeaturedRestaurant): FeaturedRestaurantModel {
   const {
     startDate,
     totalLocations,
@@ -331,4 +331,4 @@ function restaurant(param: Restaurant): RestaurantModel {
 }
 
 export { featuredResturant, restaurant };
-export type { FeaturedRestaurantModel };
+export type { FeaturedRestaurantModel, RestaurantModel };

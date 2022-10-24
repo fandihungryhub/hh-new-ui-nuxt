@@ -1,5 +1,9 @@
 {
   "welcome": "Selamat datang",
   "pleaseWait": "โปรดรอ",
-  "bannerCTA": "มียอดจองไปแล้วกว่า {total} ที่นั่ง จองโต๊ะของคุณวันนี้!"
+  "bannerCTA": "มียอดจองไปแล้วกว่า {total} ที่นั่ง จองโต๊ะของคุณวันนี้!",
+  "firstReview": "ใหม่ {review} รีวิวแรก รับไปเลย Voucher {point} บาท!",
+  "lastReservationCTA": "ร้านฮิต! จองครั้งสุดท้ายเมื่อ {time}",
+  "newRestaurantCTA": "ใหม่! จองและรีวิวเพื่อรับเวาเชอร์ {point} บาท!",
+  "totalRestaurantBookingCTA": "มาแรง! {total} คนจองร้านนี้แล้ว"
 }

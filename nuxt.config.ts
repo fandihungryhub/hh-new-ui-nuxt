@@ -1,4 +1,7 @@
 import { defineNuxtConfig } from "nuxt/config";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "url";
+import VueI18nVitePlugin from "@intlify/unplugin-vue-i18n/vite";
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   runtimeConfig: {
@@ -14,6 +17,16 @@ export default defineNuxtConfig({
   // },
   modules: ["@nuxtjs/tailwindcss"],
   buildModules: [["unplugin-icons/nuxt", { compiler: "vue3" }], "@pinia/nuxt"],
+  vite: {
+    plugins: [
+      VueI18nVitePlugin({
+        include: [
+          resolve(dirname(fileURLToPath(import.meta.url)), "./locales/*.json"),
+        ],
+      }),
+    ],
+  },
+
   // intlify: {
   //   vueI18n: {
   //     locale: "en",

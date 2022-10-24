@@ -1,5 +1,7 @@
 import { createI18n } from "vue-i18n";
 import { defineNuxtPlugin } from "#imports";
+import en from "~/locales/en.json";
+import th from "~/locales/th.json";
 
 export default defineNuxtPlugin(({ vueApp }) => {
   const i18n = createI18n({
@@ -7,13 +9,8 @@ export default defineNuxtPlugin(({ vueApp }) => {
     globalInjection: true,
     locale: "en",
     messages: {
-      en: {
-        hello: "Hello, {name}!",
-        lastReservationCTA: "Trending! Last booking was made",
-      },
-      th: {
-        lastReservationCTA: "ร้านฮิต! จองครั้งสุดท้ายเมื่อ",
-      },
+      en,
+      th,
     },
   });
 
