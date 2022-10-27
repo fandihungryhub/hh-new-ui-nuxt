@@ -1,0 +1,9 @@
+// override for swiper
+.swiper-pagination-bullet-active {
+  background: #7e7e7e !important;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  content: none;
+}

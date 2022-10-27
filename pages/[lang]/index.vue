@@ -48,7 +48,7 @@ import HomeRestaurantSlider from "~/partial/home/HomeRestaurantSlider.vue";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "~/assets/css/library-override.scss";
+import "~/assets/css/swiper.scss";
 import "~/partial/home/home.scss";
 import { formatThousand } from "~/helpers/string";
 </script>

@@ -1,7 +1,7 @@
 import humps from "humps";
 import qs from "qs";
 import { API_BASE_URL, API_MAJOR_VERSION } from "../constants";
-import { isContainQueryString } from "~/helpers/url";
+import { isContainHttp, isContainQueryString } from "~/helpers/url";
 import { $fetch, FetchOptions } from "ohmyfetch";
 import { useLang } from "~/composables/state/lang";
 import { useRuntimeConfig } from "#imports";
@@ -50,19 +50,22 @@ async function useHttp(paramConfig: paramConfig): Promise<State> {
       client_type: paramConfig.clientType || "web",
     };
 
-    const options: FetchOptions = {
-      method: paramConfig.method || "GET",
-      headers: DEFAULT_HEADERS,
-      baseURL: `${config.public.apiDomain}/${API_BASE_URL}/${API_MAJOR_VERSION}`,
-    };
-
-    if (paramConfig.data) {
-      options.body = JSON.stringify(humps.decamelizeKeys(paramConfig.data));
-    }
-
+    const isURLContainHttp = isContainHttp(paramConfig.url);
     const isURLContainQueryString = isContainQueryString(paramConfig.url)
       ? true
       : false;
+
+    const options: FetchOptions = {
+      method: paramConfig.method || "GET",
+      headers: DEFAULT_HEADERS,
+    };
+
+    if (!isURLContainHttp) {
+      options.baseURL = `${config.public.apiDomain}/${API_BASE_URL}/${API_MAJOR_VERSION}`;
+    }
+    if (paramConfig.data) {
+      options.body = JSON.stringify(humps.decamelizeKeys(paramConfig.data));
+    }
 
     if (isURLContainQueryString) {
       let parsedParamsStringify = qs.stringify(REQUIRED_PARAMS);

@@ -1,7 +1,15 @@
 <template>
-  <div class="container mx-auto bg-[#f4f6f7] lg:px-6 xl:px-0">
+  <div class="lg:bg-[#f4f6f7]">
     {{ message }}
-    <RestaurantHeader class="bg-white" />
+    <RestaurantHeader />
+    <div class="container mx-auto lg:px-6 xl:px-0">
+      <ClientOnly>
+        <RestaurantBanners />
+        <template #fallback>
+          <div class="h-[160px]"></div>
+        </template>
+      </ClientOnly>
+    </div>
   </div>
 </template>
 
@@ -10,6 +18,7 @@ import { definePageMeta, useRoute } from "#imports";
 import { getRestaurantBySlug } from "~/api/restaurant/getBySlug";
 import { rebuildAssetURL } from "~/helpers/url";
 import RestaurantHeader from "~/partial/restaurant_detail/RestaurantHeader.vue";
+import RestaurantBanners from "~/partial/restaurant_detail/RestaurantBanners.vue";
 import { isNewRestaurant } from "~~/services/restaurant";
 import { useRestaurantDetail } from "~~/stores/restaurantDetail";
 const { slug } = useRoute().params;
@@ -49,7 +58,7 @@ const { isSuccess, data, message } = await getRestaurantBySlug({
   slug: slug as string,
 });
 
-console.log("mkmk", data);
+// console.log("mkmk", data);
 
 if (isSuccess && data) {
   const {
@@ -66,7 +75,7 @@ if (isSuccess && data) {
     totalCovers,
     reservationSystemOnly,
   } = data.data;
-  console.log("ICON", logoUrl);
+  // console.log("ICON", logoUrl);
 
   const included = data.included;
   restaurant.value.name = name;
@@ -89,21 +98,16 @@ if (isSuccess && data) {
   //   earlyReviewPoint: earlyBirdPoint,
   // });
   restaurant.value.reservationSystemOnly = reservationSystemOnly;
-  included.forEach((inc) => {
-    if (inc.type === "restaurants-pictures") {
-      restaurant.value.featuredImages.push({
-        id: inc.id,
-        caption: inc.attributes.caption,
-        image: rebuildAssetURL(inc.attributes.item.url),
-      });
-    }
-  });
-  console.log("bubu", restaurant);
+  if (!restaurant.value.featuredImages.length) {
+    included.forEach((inc) => {
+      if (inc.type === "restaurants-pictures") {
+        restaurant.value.featuredImages.push({
+          id: inc.id,
+          caption: inc.attributes.caption,
+          image: rebuildAssetURL(inc.attributes.item.url),
+        });
+      }
+    });
+  }
 }
 </script>
-
-<style>
-.restaurant-detail-section {
-  @apply p-3 border-b border-gray-300;
-}
-</style>

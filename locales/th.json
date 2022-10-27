@@ -5,5 +5,7 @@
   "firstReview": "ใหม่ {review} รีวิวแรก รับไปเลย Voucher {point} บาท!",
   "lastReservationCTA": "ร้านฮิต! จองครั้งสุดท้ายเมื่อ {time}",
   "newRestaurantCTA": "ใหม่! จองและรีวิวเพื่อรับเวาเชอร์ {point} บาท!",
-  "totalRestaurantBookingCTA": "มาแรง! {total} คนจองร้านนี้แล้ว"
+  "totalRestaurantBookingCTA": "มาแรง! {total} คนจองร้านนี้แล้ว",
+  "viewOtherBranch": "ดูสาขาอื่น",
+  "acceptVoucher": "รับเวาเชอร์"
 }

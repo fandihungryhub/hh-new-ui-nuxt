@@ -12,10 +12,11 @@
         :useMutator="true"
         alt="restaurant image"
         :width="500"
+        :lazy="false"
       />
       <div
         v-if="index === 4 && images.length > maxShowedImages"
-        class="absolute top-0 left-0 flex items-center justify-center w-full h-full text-sm text-white bg-black/40"
+        class="absolute top-0 left-0 flex items-center justify-center w-full h-full text-sm text-white bg-black/40 lg:text-2xl"
       >
         {{ `${images.length - maxShowedImages}+` }}
       </div>
@@ -47,9 +48,19 @@ const featuredImages = showedImages.map((img, index) => {
       source: img.src,
       format: "webp",
       breakpoint: {
-        maxWidth: 768,
+        minWidth: 640,
       },
-      width: 384,
+      width: 300,
+      height: 180,
+      useMutator: true,
+    },
+    {
+      source: img.src,
+      format: "webp",
+      breakpoint: {
+        minWidth: 768,
+      },
+      width: 300,
       height: 180,
       useMutator: true,
     },
@@ -59,8 +70,8 @@ const featuredImages = showedImages.map((img, index) => {
       breakpoint: {
         minWidth: 1024,
       },
-      width: 300,
-      height: 250,
+      width: 370,
+      height: 240,
       useMutator: true,
     },
   ];

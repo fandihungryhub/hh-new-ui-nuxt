@@ -11,6 +11,10 @@ export function linkSearhByCuisine(cuisineId: string | number) {
   return `/restaurants/search?cuisines[]=${cuisineId}`;
 }
 
+export function linkSearchByTags(tagId: string | number) {
+  return `/restaurants/search?hashtags=${tagId}`;
+}
+
 export function createLoopId({
   name,
   id,

@@ -11,7 +11,7 @@
       :src="parsedSrc"
       :alt="alt"
       :width="widthInNumber"
-      loading="lazy"
+      :loading="lazy || null"
     />
   </picture>
 </template>
@@ -46,10 +46,12 @@ export type Props = {
   sources?: SrcSet[];
   height?: string;
   useMutator?: boolean;
+  lazy?: boolean;
 };
 
 const props = withDefaults(defineProps<Props>(), {
   height: "",
+  lazy: true,
 });
 
 type ImageSources = {
