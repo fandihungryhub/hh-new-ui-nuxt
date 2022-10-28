@@ -56,9 +56,9 @@
 
 <script lang="ts" setup>
 import type { Props as RestaurantCardProps } from "./RestaurantCard.vue";
-import type { VirtualData } from "swiper/types/modules/virtual";
+// import type { VirtualData } from "swiper/types/modules/virtual";
 import RestaurantCard from "./RestaurantCard.vue";
-import { Swiper, Navigation, Pagination, SwiperOptions, Virtual } from "swiper";
+// import { Swiper, Navigation, Pagination, SwiperOptions, Virtual } from "swiper";
 import { onMounted, ref, toRefs, watch, reactive, computed } from "vue";
 import { createLoopId } from "~/helpers/restaurant";
 export interface Props {
