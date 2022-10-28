@@ -1,68 +1,42 @@
 <template>
   <div>
-    <!-- restaurant featured image -->
-    <div class="relative">
-      <RestaurantFeaturedImage
-        class="container mx-auto lg:px-6 xl:px-0"
-        :images="parsedFeaturedImages"
-        v-if="parsedFeaturedImages.length"
-      >
-      </RestaurantFeaturedImage>
-
-      <!-- favourite, share button -->
-      <div class="absolute top-[20px] right-[20px] flex items-center">
-        <div
-          class="p-1 ml-1 rounded-full bg-glass w-[36px] h-[36px] flex items-center justify-center"
-        >
-          <IconShare @click="onShareClick" />
-        </div>
-        <div
-          class="p-1 ml-1 rounded-full bg-glass w-[36px] h-[36px] flex items-center justify-center"
-        >
-          <IconHeart @click="onFavouriteClick" class="" />
+    <div class="header-wrapper">
+      <div class="flex items-center header-section with-border">
+        <!-- restaurant icon -->
+        <RestaurantLogo
+          v-if="icon"
+          class="mr-2 w-[90px]"
+          :logo="icon"
+        ></RestaurantLogo>
+        <div class="w-full">
+          <RestaurantName class="mb-1"></RestaurantName>
+          <LastBooking
+            class="text-xs font-medium text-red-500 lg:text-base"
+            :last-booking="lastOrder"
+            :reviews-count="reviewCount"
+            :total-covers="totalCovers"
+            :early-review-point="earlyReviewPoint"
+          />
         </div>
       </div>
-    </div>
 
-    <div class="container mx-auto lg:px-6 xl:px-0">
-      <div class="bg-white rounded-2xl lg:my-4 header-wrapper">
-        <div class="flex items-center header-section with-border">
-          <!-- restaurant icon -->
-          <RestaurantLogo
-            v-if="icon"
-            class="mr-2 w-[90px]"
-            :logo="icon"
-          ></RestaurantLogo>
-          <div class="w-full">
-            <RestaurantName class="mb-1"></RestaurantName>
-            <LastBooking
-              class="text-xs font-medium text-red-500 lg:text-base"
-              :last-booking="lastOrder"
-              :reviews-count="reviewCount"
-              :total-covers="totalCovers"
-              :early-review-point="earlyReviewPoint"
-            />
-          </div>
-        </div>
+      <!-- Restaurant location,cuisine,opening hours -->
+      <div class="header-section with-border">
+        <RestaurantStats> </RestaurantStats>
+      </div>
 
-        <!-- Restaurant location,cuisine,opening hours -->
-        <div class="header-section with-border">
-          <RestaurantStats> </RestaurantStats>
-        </div>
+      <!-- Restaurant tags -->
+      <div class="header-section">
+        <RestaurantTags :tags="tags" />
+      </div>
 
-        <!-- Restaurant tags -->
-        <div class="header-section">
-          <RestaurantTags :tags="tags" />
-        </div>
-
-        <div class="header-section" v-if="branchId && showViewBranch">
-          <div class="flex justify-between mb-2">
-            <span class="flex items-center" @click="onBranchClick">
-              <button class="text-xs text-blue-500 cursor-pointer lg:text-sm">
-                {{ $t("viewOtherBranch") }}
-              </button>
-            </span>
-          </div>
+      <div class="header-section" v-if="branchId && showViewBranch">
+        <div class="flex justify-between mb-2">
+          <span class="flex items-center" @click="onBranchClick">
+            <button class="text-xs text-blue-500 cursor-pointer lg:text-sm">
+              {{ $t("viewOtherBranch") }}
+            </button>
+          </span>
         </div>
       </div>
     </div>
@@ -72,7 +46,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { SrcSet } from "~/components/HhImage.vue";
-import RestaurantFeaturedImage from "~/components/RestaurantFeaturedImage.vue";
 import RestaurantStats from "./RestaurantStats.vue";
 import RestaurantLogo from "./RestaurantLogo.vue";
 import RestaurantName from "./RestaurantName.vue";
@@ -145,9 +118,6 @@ const showInputLocation = ref(false);
 const earlyMaxReview = 100;
 const earlyReviewPoint = 10;
 const showViewBranch = !reservationSystemOnly;
-const parsedFeaturedImages = featuredImages.map((img) => {
-  return { src: img.image, caption: img.caption };
-});
 
 function shareRestaurant() {}
 

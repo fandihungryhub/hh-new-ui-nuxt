@@ -17,7 +17,7 @@ export type RestaurantPage = {
     name: string;
   };
   tags: { id: number; label: string }[];
-  featuredImages: { id: string; caption: string; image: string }[];
+  featuredImages: { id: string; caption: string; src: string }[];
   reservationSystemOnly: boolean;
   vrLink: string;
   isNewRestaurant: boolean;

@@ -25,8 +25,8 @@
           </a>
         </component>
       </component>
-      <IconArrowLeft class="swiper-button-prev right-0 top-[40%] text-black" />
-      <IconArrowRight class="swiper-button-next left-0 top-[40%] text-black" />
+      <IconArrowLeft class="swiper-button-prev left-0 top-[40%] text-black" />
+      <IconArrowRight class="swiper-button-next right-0 top-[40%] text-black" />
     </template>
   </div>
 </template>
