@@ -3,9 +3,9 @@
   <RestaurantCard v-else v-bind="props" />
 </template>
 <script lang="ts" setup>
-import RestaurantCardLoading from "~/components/RestaurantCardLoading.vue";
-import RestaurantCard from "~/components/RestaurantCard.vue";
-import type { Props as RestaurantCardProps } from "~/components/RestaurantCard.vue";
+import RestaurantCardLoading from "~/components/restaurant/RestaurantCardLoading.vue";
+import RestaurantCard from "~/components/Restaurant/RestaurantCardNew.vue";
+import type { Props as RestaurantCardProps } from "~/components/restaurant/RestaurantCard.vue";
 import { toRefs } from "vue";
 
 export interface Props extends RestaurantCardProps {
