@@ -227,7 +227,6 @@
 import {
   defineAsyncComponent,
   defineComponent,
-  PropType,
   computed,
   toRefs,
   onMounted,
@@ -243,6 +242,7 @@ import iconLocation from "~/assets/image/icon-pin-location-black.png";
 import iconPlate from "~/assets/image/icon-plate-red.png";
 import iconXperience from "~/assets/image/icon-xperience.png";
 import iconDelivery from "~/assets/image/icon-shopping-bag-red.png";
+import { useI18n } from "vue-i18n";
 
 export interface Props {
   id: string | number;
@@ -286,6 +286,10 @@ const props = withDefaults(defineProps<Props>(), {
   favouriteIcon: "",
 });
 
+const { t } = useI18n({
+  useScope: "global",
+});
+
 const {
   location,
   totalLocation,
@@ -304,7 +308,7 @@ const locationLabel = computed(() => {
     return location.value;
   }
   if (totalLocation.value > 0) {
-    return `${totalLocation.value} ${$t("branch", {
+    return `${totalLocation.value} ${t("branch", {
       count: totalLocation.value,
     })}`;
   }
