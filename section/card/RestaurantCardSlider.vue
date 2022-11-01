@@ -1,66 +1,51 @@
 <template>
   <div
+    v-if="isSwiperLoaded"
     class="relative restaurant-card-slider"
     :class="isLoading ? 'is-loading' : null"
   >
-    <div ref="sliderElement" class="swiper">
-      <div class="mb-8 restaurant-card-slide-wrapper swiper-wrapper">
-        <div
-          v-for="restaurant in restaurantsToShow"
-          :key="
-            createLoopId({
-              randomString: id,
-              name: restaurant.name,
-              id: restaurant.id,
-            })
-          "
-          class="restaurant-card-slide swiper-slide"
-        >
-          <RestaurantCard v-bind="restaurant" :is-loading="isLoading" />
-        </div>
-      </div>
-      <div ref="paginationElement" class="swiper-pagination"></div>
-    </div>
-    <div ref="nextElement" class="swiper-button-next" v-show="isShowNextArrow">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="22"
-        height="22"
-        fill="currentColor"
-        class="inline icon-chevron-right text-red-dark"
-        viewBox="0 0 16 16"
+    <component
+      :is="swiperComponent.main.value"
+      :navigation="{
+        nextEl: '.restaurant-card-slider .swiper-button-next',
+        prevEl: '.restaurant-card-slider .swiper-button-prev',
+      }"
+      :modules="[swiperModule.navigation.value, swiperModule.pagination.value]"
+      :pagination="{ clickable: true }"
+      :slides-per-view="slidePerView"
+    >
+      <component
+        :is="swiperComponent.slide.value"
+        v-for="restaurant in restaurantsToShow"
+        :key="
+          createLoopId({
+            name: restaurant.name,
+            id: restaurant.id,
+          })
+        "
+        class="restaurant-card-slide"
       >
-        <path
-          fill-rule="evenodd"
-          d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
-        />
-      </svg>
-    </div>
-    <div ref="prevElement" class="swiper-button-prev" v-show="isShowPrevArrow">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        fill="currentColor"
-        class="inline icon-chevron-left text-red-dark"
-        viewBox="0 0 16 16"
-      >
-        <path
-          fill-rule="evenodd"
-          d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
-        />
-      </svg>
-    </div>
+        <RestaurantCard v-bind="restaurant" :is-loading="isLoading" />
+      </component>
+    </component>
+    <IconArrowLeft class="swiper-button-prev left-0 top-[40%] text-black" />
+    <IconArrowRight class="swiper-button-next right-0 top-[40%] text-black" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { Props as RestaurantCardProps } from "./RestaurantCard.vue";
-// import type { VirtualData } from "swiper/types/modules/virtual";
-import RestaurantCard from "./RestaurantCard.vue";
-// import { Swiper, Navigation, Pagination, SwiperOptions, Virtual } from "swiper";
+import RestaurantCard, {
+  Props as RestaurantCardProps,
+} from "~/section/card/RestaurantCard.vue";
+import { loadSwiper } from "~/lib/swiper";
+// import "swiper/css";
+// import "swiper/css/navigation";
+// import "swiper/css/pagination";
+// import "~/assets/css/swiper.scss";
 import { onMounted, ref, toRefs, watch, reactive, computed } from "vue";
 import { createLoopId } from "~/helpers/restaurant";
+import IconArrowLeft from "~/components/icons/IconArrowLeft.vue";
+import IconArrowRight from "~/components/icons/IconArrowRight.vue";
 export interface Props {
   restaurants: RestaurantCardProps[];
   slidePerView: number;
@@ -68,34 +53,29 @@ export interface Props {
   showArrow?: boolean;
   showPagination?: boolean;
 }
-Swiper.use([Navigation, Pagination, Virtual]);
-
 const props = withDefaults(defineProps<Props>(), {
   isLoading: true,
   showArrow: true,
   showPagination: true,
 });
-const id = `${new Date().getTime()}`;
 const { restaurants, isLoading, slidePerView } = toRefs(props);
-let sliderInstance = ref<Swiper>();
-const sliderElement = ref(null);
+const isSwiperLoaded = ref(false);
 const isReachEnd = ref(false);
 const isReachStart = ref(true);
-const isShowNextArrow = computed(() => {
-  return !isReachEnd.value;
-});
-const isShowPrevArrow = computed(() => {
-  return !isReachStart.value;
-});
-const paginationElement = ref(null);
-const nextElement = ref(null);
-const prevElement = ref(null);
-const virtualData = reactive<VirtualData>({
-  slides: [],
-  offset: 0,
-  from: 0,
-  to: 0,
-});
+// const isShowNextArrow = computed(() => {
+//   return !isReachEnd.value;
+// });
+// const isShowPrevArrow = computed(() => {
+//   return !isReachStart.value;
+// });
+const swiperComponent = {
+  main: shallowRef(),
+  slide: shallowRef(),
+};
+const swiperModule = {
+  navigation: shallowRef(),
+  pagination: shallowRef(),
+};
 const restaurantsToShow = computed(() => {
   return restaurants.value;
   // if (isLoading.value || !sliderInstance.value) {
@@ -107,79 +87,84 @@ const restaurantsToShow = computed(() => {
 //   return `left: ${virtualData.offset}px;`;
 // });
 
-function initSlider() {
-  const el = sliderElement.value as unknown as HTMLElement;
-  const pagination = paginationElement.value as unknown as HTMLElement;
-  const next = nextElement.value as unknown as HTMLElement;
-  const prev = prevElement.value as unknown as HTMLElement;
-  let sliderConfig: SwiperOptions = {
-    loop: false,
-    slidesPerView: slidePerView.value,
-    spaceBetween: 10,
-    breakpoints: {
-      // when window width is >= 320px
-      640: {
-        centerInsufficientSlides: true,
-        slidesPerView: 3,
-        navigation: {
-          nextEl: next,
-          prevEl: prev,
-        },
-      },
-      768: {
-        centerInsufficientSlides: true,
-        slidesPerView: 3,
-        navigation: {
-          nextEl: next,
-          prevEl: prev,
-        },
-      },
-      1280: {
-        centerInsufficientSlides: true,
-        slidesPerView: 5,
-        navigation: {
-          nextEl: next,
-          prevEl: prev,
-        },
-      },
-    },
-    navigation: {
-      enabled: true,
-      nextEl: next,
-      prevEl: prev,
-    },
-    pagination: {
-      el: pagination,
-      clickable: true,
-      dynamicBullets: true,
-    },
-    virtual: {
-      slides: restaurants.value,
-      renderExternal(data) {
-        virtualData.from = data.from;
-        virtualData.to = data.to;
-        virtualData.slides = data.slides;
-        virtualData.offset = data.offset;
-      },
-    },
-    on: {
-      slideChange: () => {
-        isReachEnd.value = sliderInstance.value?.isEnd || false;
-        isReachStart.value = sliderInstance.value?.isBeginning || false;
-      },
-    },
-  };
-
-  sliderInstance.value = new Swiper(el, sliderConfig);
+async function initSlider() {
+  const swiper = await loadSwiper();
+  if (swiper) {
+    const { main, modules, slide } = swiper;
+    swiperComponent.main.value = main;
+    swiperComponent.slide.value = slide;
+    swiperModule.navigation.value = modules.navigation;
+    swiperModule.pagination.value = modules.pagination;
+    isSwiperLoaded.value = true;
+  }
+  // let sliderConfig: SwiperOptions = {
+  //   loop: false,
+  //   slidesPerView: slidePerView.value,
+  //   spaceBetween: 10,
+  //   breakpoints: {
+  //     // when window width is >= 320px
+  //     640: {
+  //       centerInsufficientSlides: true,
+  //       slidesPerView: 3,
+  //       navigation: {
+  //         nextEl: next,
+  //         prevEl: prev,
+  //       },
+  //     },
+  //     768: {
+  //       centerInsufficientSlides: true,
+  //       slidesPerView: 3,
+  //       navigation: {
+  //         nextEl: next,
+  //         prevEl: prev,
+  //       },
+  //     },
+  //     1280: {
+  //       centerInsufficientSlides: true,
+  //       slidesPerView: 5,
+  //       navigation: {
+  //         nextEl: next,
+  //         prevEl: prev,
+  //       },
+  //     },
+  //   },
+  //   navigation: {
+  //     enabled: true,
+  //     nextEl: next,
+  //     prevEl: prev,
+  //   },
+  //   pagination: {
+  //     el: pagination,
+  //     clickable: true,
+  //     dynamicBullets: true,
+  //   },
+  //   virtual: {
+  //     slides: restaurants.value,
+  //     renderExternal(data) {
+  //       virtualData.from = data.from;
+  //       virtualData.to = data.to;
+  //       virtualData.slides = data.slides;
+  //       virtualData.offset = data.offset;
+  //     },
+  //   },
+  //   on: {
+  //     slideChange: () => {
+  //       isReachEnd.value = sliderInstance.value?.isEnd || false;
+  //       isReachStart.value = sliderInstance.value?.isBeginning || false;
+  //     },
+  //   },
+  // };
 }
 
-onMounted(() => {
-  watch(isLoading, (newVal) => {
-    if (newVal === false) {
-      initSlider();
-    }
-  });
-});
+await initSlider();
+
+// onMounted(() => {
+//   watch(isLoading, (newVal) => {
+//     if (newVal === false) {
+//       initSlider();
+//     }
+//   });
+// });
 </script>
 <script lang="ts">
 export default {
@@ -196,7 +181,6 @@ export default {
 
     @screen lg {
       width: 20%;
-      margin: 0;
     }
   }
 
