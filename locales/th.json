@@ -7,5 +7,7 @@
   "newRestaurantCTA": "ใหม่! จองและรีวิวเพื่อรับเวาเชอร์ {point} บาท!",
   "totalRestaurantBookingCTA": "มาแรง! {total} คนจองร้านนี้แล้ว",
   "viewOtherBranch": "ดูสาขาอื่น",
-  "acceptVoucher": "รับเวาเชอร์"
+  "acceptVoucher": "รับเวาเชอร์",
+  "netPerson": "ราคาสุทธิ/ท่าน",
+  "netSet": "ราคาสุทธิ/เซ็ต"
 }

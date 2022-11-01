@@ -7,5 +7,7 @@
   "newRestaurantCTA": "New! Book & review to earn {point} hungry vouchers!",
   "totalRestaurantBookingCTA": "Popular! Booked by {total} people",
   "viewOtherBranch": "View other branches",
-  "acceptVoucher": "Accept Voucher"
+  "acceptVoucher": "Accept Voucher",
+  "netPerson": "NET/person",
+  "netSet": "NET/set"
 }
