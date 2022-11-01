@@ -1,8 +1,8 @@
 function pricingTypeLabel(type: string) {
   if (type === "per_person") {
-    return $t("netPerson");
+    return "netPerson";
   } else {
-    return $t("netSet");
+    return "netSet";
   }
 }
 
