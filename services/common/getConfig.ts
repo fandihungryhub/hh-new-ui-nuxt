@@ -1,5 +1,4 @@
 import { useHttp } from "#imports";
-import { API_BASE_URL, API_MAJOR_VERSION } from "~/constants";
 import { useReport } from "~/composables/report/useReport";
 
 export interface APIResponse {
@@ -80,7 +79,7 @@ export async function getConfig(): Promise<{
   message: string;
 }> {
   const { data, error } = await useHttp({
-    url: `${API_BASE_URL}/${API_MAJOR_VERSION}/config.json`,
+    url: `/config.json`,
     canRetry: true,
   });
 
