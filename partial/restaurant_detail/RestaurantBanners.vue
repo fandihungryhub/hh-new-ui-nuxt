@@ -43,6 +43,11 @@ async function getBanners() {
           img: image,
           alt: caption,
         });
+        bannersData.value.push({
+          link: banner.targetUrl,
+          img: image,
+          alt: caption,
+        });
       });
     }
   }
