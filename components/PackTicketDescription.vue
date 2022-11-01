@@ -95,8 +95,5 @@ export default defineComponent({
       required: true,
     },
   },
-  methods: {
-    translate,
-  },
 });
 </script>
