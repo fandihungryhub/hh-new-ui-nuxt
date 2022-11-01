@@ -11,7 +11,7 @@
       <RestaurantCardSlider
         class="max-width"
         :restaurants="showedRestaurants"
-        :slidePerView="sliderPerView"
+        :slidePerView="slidePerView"
         :is-loading="isLoading"
       />
     </div>
@@ -20,7 +20,6 @@
 
 <script lang="ts" setup>
 import { useIntersectionObserver } from "@vueuse/core";
-import RestaurantCardSlider from "~/section/card/RestaurantCardSlider.vue";
 import type { Props as RestaurantCardSliderProps } from "~/section/card/RestaurantCardSlider.vue";
 import { createDummyFeaturedRestaurant } from "~/services/restaurant";
 import {
@@ -51,8 +50,7 @@ const props = defineProps({
     required: true,
   },
 });
-const sliderPerView = isDesktop ? 5 : isTablet ? 4 : 2;
-console.log("sliderPerView", sliderPerView);
+const slidePerView = isDesktop ? 5 : isTablet ? 4 : 2;
 const { apiOrder } = toRefs(props);
 const observerTarget = ref(null);
 const dummyCount = 5;
@@ -66,6 +64,9 @@ const restaurantsDummy: Ref<RestaurantCardSliderProps["restaurants"]> = ref([]);
 const showedRestaurants = computed(() => {
   return isLoading.value ? restaurantsDummy.value : restaurants.value;
 });
+const RestaurantCardSlider = defineAsyncComponent(
+  () => import("~/section/card/RestaurantCardSlider.vue")
+);
 const { stop } = useIntersectionObserver(
   observerTarget,
   ([{ isIntersecting }], observerElement) => {
@@ -88,7 +89,7 @@ async function fetchData() {
     data.data.forEach((item) => {
       if (!isRestaurantTags(item)) {
         restaurants.value.push({
-          isLoading: false,
+          isLoading: isLoading.value,
           id: item.id,
           link: item.link,
           image: {
@@ -136,7 +137,7 @@ function initDummy() {
     } = temp.attributes;
     const id = `${index}-${new Date().getTime()}`;
     restaurantsDummy.value.push({
-      isLoading: false,
+      isLoading: isLoading.value,
       id: id,
       link: link,
       image: {
@@ -183,3 +184,13 @@ export default {
   name: "HomeRestaurantSlider",
 };
 </script>
+
+<style scoped>
+.section-title {
+  @apply my-2 text-sm lg:font-black lg:text-center lg:text-xl lg:my-4;
+}
+
+.section-title.is-loading {
+  @apply bg-gray-300 text-gray-300 w-9/12 lg:w-6/12 mx-auto;
+}
+</style>
