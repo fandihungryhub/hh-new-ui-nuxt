@@ -1,5 +1,5 @@
 <template>
-  <div class="lg:bg-[#f4f6f7]">
+  <div class="lg:bg-[#f4f6f7] min-h-screen">
     <!-- restaurant featured image -->
     <section
       class="container mx-auto lg:px-6 xl:px-0"
