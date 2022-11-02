@@ -38,14 +38,15 @@ import RestaurantCard, {
   Props as RestaurantCardProps,
 } from "~/section/card/RestaurantCard.vue";
 import { loadSwiper } from "~/lib/swiper";
-// import "swiper/css";
-// import "swiper/css/navigation";
-// import "swiper/css/pagination";
-// import "~/assets/css/swiper.scss";
 import { onMounted, ref, toRefs, watch, reactive, computed } from "vue";
 import { createLoopId } from "~/helpers/restaurant";
 import IconArrowLeft from "~/components/icons/IconArrowLeft.vue";
 import IconArrowRight from "~/components/icons/IconArrowRight.vue";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "~/assets/css/swiper.scss";
+
 export interface Props {
   restaurants: RestaurantCardProps[];
   slidePerView: number;

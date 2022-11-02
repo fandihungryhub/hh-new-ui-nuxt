@@ -1,9 +1,5 @@
 async function loadSwiper() {
   try {
-    await import("swiper/css");
-    await import("swiper/css/navigation");
-    await import("swiper/css/pagination");
-    await import("~/assets/css/swiper.scss");
     const importSwiper = await import("swiper/vue");
     const importSwiperModule = await import("swiper");
     if (importSwiper && importSwiperModule) {

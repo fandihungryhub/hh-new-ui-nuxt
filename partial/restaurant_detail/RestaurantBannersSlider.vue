@@ -32,6 +32,10 @@
 </template>
 
 <script lang="ts" setup>
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "~/assets/css/swiper.scss";
 import IconArrowLeft from "~/components/icons/IconArrowLeft.vue";
 import IconArrowRight from "~/components/icons/IconArrowRight.vue";
 import { loadSwiper } from "~/lib/swiper";
