@@ -4,7 +4,7 @@
 </template>
 <script lang="ts" setup>
 import RestaurantCardLoading from "~/components/restaurant/RestaurantCardLoading.vue";
-import RestaurantCard from "~/components/Restaurant/RestaurantCardNew.vue";
+import RestaurantCard from "~/components/restaurant/RestaurantCardNew.vue";
 import type { Props as RestaurantCardProps } from "~/components/restaurant/RestaurantCard.vue";
 import { toRefs } from "vue";
 
