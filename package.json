@@ -10,7 +10,7 @@
     "lhci:mobile": "lhci autorun",
     "lhci:desktop": "lhci autorun --collect.settings.preset=desktop",
     "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
+    "docs:build": "nuxt build && vitepress build docs",
     "docs:serve": "vitepress serve docs"
   },
   "dependencies": {
