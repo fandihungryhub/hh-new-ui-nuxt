@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative rounded-b-lg shadow-md">
     <HhImage
       :sources="image.sources"
       :src="image.src"
@@ -7,9 +7,9 @@
       alt="restaurant image"
       :width="image.width || defaultImgSize.width"
       :height="image.height || defaultImgSize.height"
-      class="w-full bg-gray-300 rounded-lg restaurant-image"
+      class="w-full bg-gray-300 rounded-t-lg restaurant-image"
     />
-    <div class="mt-2">
+    <div class="p-2">
       <div class="mb-2 text-sm font-bold text-gray-700 truncate">
         {{ name }}
       </div>
@@ -39,6 +39,7 @@
 </template>
 
 <script lang="ts" setup>
+import HhImage from "~/components/HhImage.vue";
 import type { SrcSet } from "~/components/HhImage.vue";
 import IconStar from "~/components/icons/IconStar.vue";
 import IconFork from "~/components/icons/IconFork.vue";
@@ -86,7 +87,6 @@ const defaultImgSize = {
 const priceLabel = `${moneyFormat(price)} ${t(pricingTypeLabel(pricingType))}`;
 
 const locationLabel = totalLocation > 0 ? `${totalLocation} Branch` : location;
-const HhImage = defineAsyncComponent(() => import("~/components/HhImage.vue"));
 </script>
 <script lang="ts">
 export default {

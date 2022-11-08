@@ -11,6 +11,7 @@
       :src="parsedSrc"
       :alt="alt"
       :width="widthInNumber"
+      :height="height"
       :loading="lazy || null"
     />
   </picture>

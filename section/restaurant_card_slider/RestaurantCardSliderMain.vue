@@ -1,17 +1,13 @@
 <template>
-  <div
-    v-if="isSwiperLoaded"
-    class="relative restaurant-card-slider"
-    :class="isLoading ? 'is-loading' : null"
-  >
+  <div v-if="isSwiperLoaded" class="relative restaurant-card-slider">
     <component
       :is="swiperComponent.main.value"
       :navigation="{
-        nextEl: '.restaurant-card-slider .swiper-button-next',
-        prevEl: '.restaurant-card-slider .swiper-button-prev',
+        nextEl: `.restaurant-card-slider .${swiperNext}`,
+        prevEl: `.restaurant-card-slider .${swiperPrev}`,
       }"
       :modules="[swiperModule.navigation.value, swiperModule.pagination.value]"
-      :pagination="{ clickable: true }"
+      :pagination="paginationOption"
       :slides-per-view="slidePerView"
     >
       <component
@@ -25,11 +21,17 @@
         "
         class="restaurant-card-slide"
       >
-        <RestaurantCard v-bind="restaurant" :is-loading="isLoading" />
+        <RestaurantCard v-bind="restaurant" :is-loading="false" />
       </component>
     </component>
-    <IconArrowLeft class="swiper-button-prev left-0 top-[40%] text-black" />
-    <IconArrowRight class="swiper-button-next right-0 top-[40%] text-black" />
+    <IconArrowLeft
+      class="swiper-button-prev left-0 top-[40%] text-black"
+      :class="swiperPrev"
+    />
+    <IconArrowRight
+      :class="swiperNext"
+      class="swiper-button-next right-0 top-[40%] text-black"
+    />
   </div>
 </template>
 
@@ -37,11 +39,16 @@
 import RestaurantCard, {
   Props as RestaurantCardProps,
 } from "~/section/card/RestaurantCard.vue";
-import { loadSwiper } from "~/lib/swiper";
+import {
+  loadSwiper,
+  loadNavigationModule,
+  loadPaginationModule,
+} from "~/lib/swiper";
 import { onMounted, ref, toRefs, watch, reactive, computed } from "vue";
 import { createLoopId } from "~/helpers/restaurant";
 import IconArrowLeft from "~/components/icons/IconArrowLeft.vue";
 import IconArrowRight from "~/components/icons/IconArrowRight.vue";
+import { nanoid } from "nanoid";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -50,19 +57,24 @@ import "~/assets/css/swiper.scss";
 export interface Props {
   restaurants: RestaurantCardProps[];
   slidePerView: number;
-  isLoading?: boolean;
   showArrow?: boolean;
   showPagination?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
-  isLoading: true,
   showArrow: true,
   showPagination: true,
 });
-const { restaurants, isLoading, slidePerView } = toRefs(props);
+const { restaurants, slidePerView } = toRefs(props);
+const swiperId = nanoid(5);
+const swiperPrev = `swiper-prev-${swiperId}`;
+const swiperNext = `swiper-next-${swiperId}`;
 const isSwiperLoaded = ref(false);
 const isReachEnd = ref(false);
 const isReachStart = ref(true);
+const paginationOption = {
+  clickable: true,
+  dynamicBullets: true,
+};
 // const isShowNextArrow = computed(() => {
 //   return !isReachEnd.value;
 // });
@@ -90,12 +102,14 @@ const restaurantsToShow = computed(() => {
 
 async function initSlider() {
   const swiper = await loadSwiper();
-  if (swiper) {
-    const { main, modules, slide } = swiper;
+  const navigation = await loadNavigationModule();
+  const pagination = await loadPaginationModule();
+  if (swiper && navigation && pagination) {
+    const { main, slide } = swiper;
     swiperComponent.main.value = main;
     swiperComponent.slide.value = slide;
-    swiperModule.navigation.value = modules.navigation;
-    swiperModule.pagination.value = modules.pagination;
+    swiperModule.navigation.value = navigation;
+    swiperModule.pagination.value = pagination;
     isSwiperLoaded.value = true;
   }
   // let sliderConfig: SwiperOptions = {
@@ -158,14 +172,6 @@ async function initSlider() {
 }
 
 await initSlider();
-
-// onMounted(() => {
-//   watch(isLoading, (newVal) => {
-//     if (newVal === false) {
-//       initSlider();
-//     }
-//   });
-// });
 </script>
 <script lang="ts">
 export default {
@@ -176,13 +182,14 @@ export default {
 <style lang="scss" scoped>
 .restaurant-card-slider {
   .restaurant-card-slide {
-    width: 50%;
+    // width: 50%;
 
-    @apply mr-2;
+    @apply pb-10;
+    @apply pr-3;
 
-    @screen lg {
-      width: 20%;
-    }
+    // @screen lg {
+    //   width: 18%;
+    // }
   }
 
   .swiper-button-next {

@@ -1,6 +1,6 @@
 <template>
   <div class="mx-4">
-    <div v-show="isShow">
+    <div v-show="isShow" class="lg:h-[350px]">
       <div
         ref="observerTarget"
         class="section-title"
@@ -8,19 +8,20 @@
       >
         {{ title }}
       </div>
-      <RestaurantCardSlider
-        class="max-width"
-        :restaurants="showedRestaurants"
-        :slidePerView="slidePerView"
-        :is-loading="isLoading"
-      />
+      <div class="max-width">
+        <RestaurantCardSlider
+          :restaurants="showedRestaurants"
+          :slidePerView="slidePerView"
+          :isLoading="isLoading"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useIntersectionObserver } from "@vueuse/core";
-import type { Props as RestaurantCardSliderProps } from "~/section/card/RestaurantCardSlider.vue";
+import type { Props as RestaurantCardSliderProps } from "~/section/restaurant_card_slider/RestaurantCardSlider.vue";
 import { createDummyFeaturedRestaurant } from "~/services/restaurant";
 import {
   getHomeSection,
@@ -58,14 +59,14 @@ const isVisible = ref(false);
 const isDataLoaded = ref(false);
 const isLoading = ref(true);
 const isShow = ref(true);
-const title = ref("section title");
+const title = ref("");
 const restaurants: Ref<RestaurantCardSliderProps["restaurants"]> = ref([]);
 const restaurantsDummy: Ref<RestaurantCardSliderProps["restaurants"]> = ref([]);
 const showedRestaurants = computed(() => {
   return isLoading.value ? restaurantsDummy.value : restaurants.value;
 });
 const RestaurantCardSlider = defineAsyncComponent(
-  () => import("~/section/card/RestaurantCardSlider.vue")
+  () => import("~/section/restaurant_card_slider/RestaurantCardSlider.vue")
 );
 const { stop } = useIntersectionObserver(
   observerTarget,
@@ -191,6 +192,6 @@ export default {
 }
 
 .section-title.is-loading {
-  @apply bg-gray-300 text-gray-300 w-9/12 lg:w-6/12 mx-auto;
+  @apply bg-gray-300 text-gray-300 w-9/12 lg:w-6/12 mx-auto h-4;
 }
 </style>
