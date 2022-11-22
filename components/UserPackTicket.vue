@@ -58,18 +58,16 @@ export default defineComponent({
   },
   computed: {
     validUntilLabel() {
-      const startDate = dayjs(this.validStartDate);
-      const endDate = dayjs(this.validEndDate);
-      if (!startDate.isValid() || !endDate.isValid()) {
-        return "";
-      }
-      return `${$t("validUntil")} ${startDate.format(
-        "DD MMM"
-      )} - ${endDate.format("DD MMM YYYY")}`;
+      return "";
+      // const startDate = dayjs(this.validStartDate);
+      // const endDate = dayjs(this.validEndDate);
+      // if (!startDate.isValid() || !endDate.isValid()) {
+      //   return "";
+      // }
+      // return `${$t("validUntil")} ${startDate.format(
+      //   "DD MMM"
+      // )} - ${endDate.format("DD MMM YYYY")}`;
     },
-  },
-  methods: {
-    translate,
   },
 });
 </script>

@@ -27,8 +27,8 @@ import {
   getHomeSection,
   isRestaurantTags,
 } from "~/services/common/homeSection";
-import { selectedCityId } from "~/stores/city";
-import { errorToast } from "~/lib/alert";
+import useCityStore from "~/stores/city";
+import alert from "~/lib/alert";
 import { isDesktop, isMobile, isTablet } from "~/helpers/screenSize";
 import {
   computed,
@@ -40,6 +40,7 @@ import {
   toRefs,
   watch,
 } from "vue";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
   apiOrder: {
@@ -51,7 +52,9 @@ const props = defineProps({
     required: true,
   },
 });
-const slidePerView = isDesktop ? 5 : isTablet ? 4 : 2;
+const cityStore = useCityStore();
+const { selectedCityId } = storeToRefs(cityStore);
+const slidePerView = isDesktop ? 4 : isTablet ? 4 : 2;
 const { apiOrder } = toRefs(props);
 const observerTarget = ref(null);
 const dummyCount = 5;
@@ -79,9 +82,10 @@ async function fetchData() {
   isLoading.value = true;
   const { data, isSuccess, message } = await getHomeSection({
     order: apiOrder.value,
+    cityId: selectedCityId.value,
   });
   if (!isSuccess || !data) {
-    errorToast(message);
+    alert.error(message);
     return;
   }
   if (data) {

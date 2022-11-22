@@ -15,9 +15,8 @@ function setupReport(rollbarConfig: Configuration) {
 }
 
 const useReport = (paramater: ReportParameter) => {
-  return;
   if (isEmpty(rollbarInstance)) {
-    throw new Error("Rollbar instance is not configured");
+    setupReport();
   }
   const logLevel = paramater.level || "debug";
   rollbarInstance.configure({ logLevel });

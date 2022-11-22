@@ -11,10 +11,7 @@
 <script lang="ts" setup>
 import { defineAsyncComponent } from "#imports";
 import { useRestaurantDetail } from "~/stores/restaurantDetail";
-import {
-  getRestaurantBanners,
-  GetRestaurantBanners,
-} from "~/api/restaurant/getRestaurantBanners";
+import { getRestaurantBanners } from "~/api/restaurant/getBanners";
 import { rebuildAssetURL } from "~~/helpers/url";
 
 const BannersSlider = defineAsyncComponent(
