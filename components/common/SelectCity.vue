@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import type { PropType } from "vue";
-import type { City } from "src/types/City";
+import type { City } from "~/types/City";
 defineProps({
   selectedCityId: String,
   cities: {

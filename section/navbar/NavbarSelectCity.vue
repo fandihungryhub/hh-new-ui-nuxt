@@ -13,7 +13,7 @@
 import type { City } from "~/types/City";
 import { onMounted, PropType, watch } from "vue";
 import { ref } from "vue";
-import SelectCity from "~/components/SelectCity.vue";
+import SelectCity from "~~/components/common/SelectCity.vue";
 import { cityOption as storeCities } from "~/stores/city";
 import { selectedCityId } from "~/stores/city";
 const props = defineProps({
