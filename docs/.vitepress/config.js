@@ -28,6 +28,28 @@ export default defineConfig({
               { text: "Types", link: "/structure/types" },
             ],
           },
+          {
+            text: "How To",
+            items: [
+              {
+                text: "Add New Icon",
+                link: "/how-to/add-new-icon",
+              },
+              {
+                text: "Add New API",
+                link: "/how-to/add-new-api",
+              },
+            ],
+          },
+          {
+            text: "Others",
+            items: [
+              {
+                text: "VS Code Extension",
+                link: "/others/recommended-vs-code-extensions",
+              },
+            ],
+          },
         ],
       },
     ],
