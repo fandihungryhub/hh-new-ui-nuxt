@@ -15,11 +15,11 @@
     "docs:serve": "vitepress serve docs"
   },
   "dependencies": {
-    "@afif_hh/web-toolkit": "^0.0.36",
     "@nuxtjs/tailwindcss": "^6.0.1",
     "@pinia/nuxt": "^0.4.3",
     "@vueuse/core": "^9.3.1",
     "daisyui": "^2.19.0",
+    "dayjs": "^1.11.6",
     "humps": "^2.0.1",
     "js-cookie": "^3.0.1",
     "ky": "^0.31.1",

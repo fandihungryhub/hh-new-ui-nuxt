@@ -16,8 +16,9 @@ export default defineNuxtConfig({
   // imports: {
   //   autoImport: false,
   // },
-  modules: ["@nuxtjs/tailwindcss"],
-  buildModules: [
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
     [
       "unplugin-icons/nuxt",
       {
@@ -29,7 +30,6 @@ export default defineNuxtConfig({
         },
       },
     ],
-    "@pinia/nuxt",
   ],
   vite: {
     plugins: [
