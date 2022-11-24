@@ -36,7 +36,7 @@ export type SrcSet = {
   };
   width?: number;
   height?: number;
-  pixelDensity?: string;
+  pixelDensity?: "1x" | "2x";
   useMutator?: boolean;
 };
 
@@ -131,12 +131,12 @@ function init() {
             })
           : undefined,
         source: imgSource.useMutator
-          ? useImageMutator({
+          ? `${useImageMutator({
               width: usedWidth,
               height: imgSource.height || 0,
               isWebp: imgSource.format === "webp",
               image: imgSource.source,
-            })
+            })} ${imgSource.pixelDensity}`
           : imgSource.source,
       });
     });
