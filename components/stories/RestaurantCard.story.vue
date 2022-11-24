@@ -5,10 +5,11 @@
 </template>
 
 <script lang="ts" setup>
-import RestaurantCard from "../RestaurantCard.vue";
+import RestaurantCard from "../restaurant/RestaurantCardNew.vue";
 const title = "Restaurant Card";
 
 const props = {
+  id: "",
   link: "",
   image: {
     src: "http://fakeimg.pl/1500?font=lobster",
