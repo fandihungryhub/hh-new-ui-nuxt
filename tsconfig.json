@@ -5,7 +5,9 @@
     "strict": true,
     "types": [
       "@pinia/nuxt",
-      "unplugin-icons/types/vue"
-    ]
+      "unplugin-icons/types/vue",
+      "vue-final-modal"
+    ],
+    "forceConsistentCasingInFileNames": true,
   }
 }
