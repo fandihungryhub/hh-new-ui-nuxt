@@ -1,6 +1,6 @@
-import useHttp from "~/composables/useHttp";
 import { isEmpty } from "lodash-es";
-import { API_MINOR_VERSION } from "~/constants";
+import useHttp from "~/composables/useHttp";
+import { API_MINOR_VERSION, DEFAULT_ERROR_MESSAGE } from "~/constants";
 import type { FeaturedRestaurant } from "~/types/Restaurant";
 
 export interface RestaurantTags {
@@ -100,8 +100,7 @@ export async function getHomeSection({
       data: null,
     };
   }
-  const defaultErrorMessage =
-    "Oops, someting went wrong, failed get section data";
+  const defaultErrorMessage = `${DEFAULT_ERROR_MESSAGE}, failed get section data`;
   const url = `/homes/section_${order}.json`;
 
   const param: {
@@ -141,6 +140,13 @@ export async function getHomeSection({
   });
 
   const responseData = data as SectionData;
+  if (isEmpty(responseData)) {
+    return {
+      isSuccess: false,
+      message: error.message || defaultErrorMessage,
+      data: null,
+    };
+  }
 
   if (!responseData.success) {
     return {

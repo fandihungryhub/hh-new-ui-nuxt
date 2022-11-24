@@ -12,12 +12,13 @@ const convertToNumber = (param: string | number): number => {
     return param;
   } else if (typeof param === "string" && param.length > 0) {
     // to remove character after ','
-    const split = param.split(".");
+    // const split = param.split(".");
     // to remove character if it is not a number
-    const removeNonNumber = split[0].match(/\d+/g);
-    const finalNumber =
-      removeNonNumber !== null ? parseInt(removeNonNumber.join("")) : 0;
-    return finalNumber;
+    // const removeNonNumber = split[0].match(/\d+/g);
+    // const finalNumber =
+    //   removeNonNumber !== null ? parseInt(removeNonNumber.join("")) : 0;
+    const replace = param.replace(/[^0-9]+/g, "");
+    return parseInt(replace);
   }
   return 0;
 };
@@ -52,6 +53,9 @@ const moneyFormat = (param: number | string): string => {
 
 const isValidJsonString = (str: string) => {
   try {
+    if (typeof str !== "string") {
+      return false;
+    }
     JSON.parse(str);
   } catch (e) {
     return false;
@@ -60,6 +64,9 @@ const isValidJsonString = (str: string) => {
 };
 
 const toSlug = (param: string) => {
+  if (typeof param !== "string") {
+    return "";
+  }
   return param
     .toLowerCase()
     .trim()

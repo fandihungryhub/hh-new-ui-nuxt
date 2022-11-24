@@ -1,9 +1,8 @@
-import { getHomeSection as homeSection } from "~/api/common/homeSection";
+import { getHomeSection as homeSection } from "~/api/home_section/getHomeSection";
 import type {
   FeaturedRestaurants,
   RestaurantTags,
-} from "~/api/common/homeSection";
-import { selectedCityId } from "~/stores/city";
+} from "~/api/home_section/getHomeSection";
 import { featuredResturant } from "~/models/restaurant";
 import type { FeaturedRestaurantModel } from "~/models/restaurant";
 
@@ -17,16 +16,18 @@ async function getHomeSection({
   pageNumber,
   pageSize,
   order,
+  cityId,
 }: {
   pageNumber?: number;
   pageSize?: number;
   order: number;
+  cityId: number | string;
 }) {
   const { isSuccess, data, message } = await homeSection({
     pageNumber,
     pageSize,
     order,
-    cityId: selectedCityId.value,
+    cityId: cityId,
   });
   if (!isSuccess || !data) {
     return {

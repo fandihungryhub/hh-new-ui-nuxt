@@ -2,6 +2,7 @@ import { defineNuxtConfig } from "nuxt/config";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "url";
 import VueI18nVitePlugin from "@intlify/unplugin-vue-i18n/vite";
+import { FileSystemIconLoader } from "unplugin-icons/loaders";
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   runtimeConfig: {
@@ -15,8 +16,21 @@ export default defineNuxtConfig({
   // imports: {
   //   autoImport: false,
   // },
-  modules: ["@nuxtjs/tailwindcss"],
-  buildModules: [["unplugin-icons/nuxt", { compiler: "vue3" }], "@pinia/nuxt"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
+    [
+      "unplugin-icons/nuxt",
+      {
+        compiler: "vue3",
+        customCollections: {
+          "hh-icons": FileSystemIconLoader("./assets/icons", (svg) =>
+            svg.replace(/^<svg /, '<svg fill="currentColor" ')
+          ),
+        },
+      },
+    ],
+  ],
   vite: {
     plugins: [
       VueI18nVitePlugin({

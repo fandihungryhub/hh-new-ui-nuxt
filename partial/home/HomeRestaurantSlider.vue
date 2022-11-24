@@ -1,6 +1,6 @@
 <template>
   <div class="mx-4">
-    <div v-show="isShow">
+    <div v-show="isShow" class="lg:h-[350px]">
       <div
         ref="observerTarget"
         class="section-title"
@@ -8,26 +8,27 @@
       >
         {{ title }}
       </div>
-      <RestaurantCardSlider
-        class="max-width"
-        :restaurants="showedRestaurants"
-        :slidePerView="slidePerView"
-        :is-loading="isLoading"
-      />
+      <div class="max-width">
+        <RestaurantCardSlider
+          :restaurants="showedRestaurants"
+          :slidePerView="slidePerView"
+          :isLoading="isLoading"
+        />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useIntersectionObserver } from "@vueuse/core";
-import type { Props as RestaurantCardSliderProps } from "~/section/card/RestaurantCardSlider.vue";
+import type { Props as RestaurantCardSliderProps } from "~/section/restaurant_card_slider/RestaurantCardSlider.vue";
 import { createDummyFeaturedRestaurant } from "~/services/restaurant";
 import {
   getHomeSection,
   isRestaurantTags,
 } from "~/services/common/homeSection";
-import { selectedCityId } from "~/stores/city";
-import { errorToast } from "~/lib/alert";
+import useCityStore from "~/stores/city";
+import alert from "~/lib/alert";
 import { isDesktop, isMobile, isTablet } from "~/helpers/screenSize";
 import {
   computed,
@@ -39,6 +40,7 @@ import {
   toRefs,
   watch,
 } from "vue";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
   apiOrder: {
@@ -50,7 +52,9 @@ const props = defineProps({
     required: true,
   },
 });
-const slidePerView = isDesktop ? 5 : isTablet ? 4 : 2;
+const cityStore = useCityStore();
+const { selectedCityId } = storeToRefs(cityStore);
+const slidePerView = isDesktop ? 4 : isTablet ? 4 : 2;
 const { apiOrder } = toRefs(props);
 const observerTarget = ref(null);
 const dummyCount = 5;
@@ -58,14 +62,14 @@ const isVisible = ref(false);
 const isDataLoaded = ref(false);
 const isLoading = ref(true);
 const isShow = ref(true);
-const title = ref("section title");
+const title = ref("");
 const restaurants: Ref<RestaurantCardSliderProps["restaurants"]> = ref([]);
 const restaurantsDummy: Ref<RestaurantCardSliderProps["restaurants"]> = ref([]);
 const showedRestaurants = computed(() => {
   return isLoading.value ? restaurantsDummy.value : restaurants.value;
 });
 const RestaurantCardSlider = defineAsyncComponent(
-  () => import("~/section/card/RestaurantCardSlider.vue")
+  () => import("~/section/restaurant_card_slider/RestaurantCardSlider.vue")
 );
 const { stop } = useIntersectionObserver(
   observerTarget,
@@ -78,9 +82,10 @@ async function fetchData() {
   isLoading.value = true;
   const { data, isSuccess, message } = await getHomeSection({
     order: apiOrder.value,
+    cityId: selectedCityId.value,
   });
   if (!isSuccess || !data) {
-    errorToast(message);
+    alert.error(message);
     return;
   }
   if (data) {
@@ -191,6 +196,6 @@ export default {
 }
 
 .section-title.is-loading {
-  @apply bg-gray-300 text-gray-300 w-9/12 lg:w-6/12 mx-auto;
+  @apply bg-gray-300 text-gray-300 w-9/12 lg:w-6/12 mx-auto h-4;
 }
 </style>

@@ -1,55 +1,47 @@
-import { computed, ref, watch } from "vue";
 import type { City } from "~/types/City";
-import { getCity } from "~/api/common/city";
+import { getCities } from "~/services/common/getCities";
+import alert from "~/lib/alert";
+import { defineStore } from "pinia";
 
-const selectedCityId = ref("1");
-const bangkokCity: City = {
-  id: "1",
-  type: "cities",
-  attributes: {
-    name: "Bangkok",
-    homeDescription: "",
+const useCityStore = defineStore("city", {
+  state: () => {
+    return {
+      defaultCity: {
+        id: "1",
+        type: "cities",
+        attributes: {
+          name: "Bangkok",
+          homeDescription: "",
+        },
+      } as City,
+      selectedCityId: "1",
+      cityOption: [] as City[],
+    };
   },
-};
-const selectedCity = computed(() => {
-  const filter = cityOption.value.filter(
-    (city) => city.id === selectedCityId.value
-  );
-  if (filter.length) {
-    return filter[0];
-  }
-  return {
-    id: "",
-    type: "cities",
-    attributes: {
-      name: "",
-      homeDescription: "",
+  getters: {
+    selectedCity(): City | null {
+      const filter = this.cityOption.filter(
+        (city) => city.id === this.selectedCityId
+      );
+      return filter.length ? filter[0] : null;
     },
-  };
+    selectedCityName(): string {
+      return this.selectedCity?.attributes.name || "";
+    },
+    selectedCityHomeDescription(): string {
+      return this.selectedCity?.attributes.homeDescription || "";
+    },
+  },
+  actions: {
+    async fetchCity() {
+      const { isSuccess, data, message } = await getCities();
+      if (!isSuccess) {
+        alert.error(message);
+      } else if (isSuccess && data) {
+        this.cityOption = data;
+      }
+    },
+  },
 });
-const selectedCityName = computed(() => {
-  return selectedCity.value.attributes.name;
-});
 
-const selectedCityHomeDescription = computed(() => {
-  return selectedCity.value.attributes.homeDescription;
-});
-
-const cityOption = ref<City[]>([bangkokCity]);
-
-async function fetchCity() {
-  const { isSuccess, data } = await getCity();
-  if (isSuccess && data) {
-    cityOption.value = data;
-  }
-}
-
-export {
-  bangkokCity,
-  selectedCityId,
-  selectedCity,
-  cityOption,
-  fetchCity,
-  selectedCityName,
-  selectedCityHomeDescription,
-};
+export default useCityStore;

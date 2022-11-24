@@ -8,7 +8,7 @@ export interface GetCityResponse {
   message: null;
 }
 
-export async function getCity(): Promise<{
+export async function getCities(): Promise<{
   isSuccess: boolean;
   message: string;
   data: GetCityResponse["data"] | null;

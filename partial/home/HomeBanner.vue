@@ -21,65 +21,38 @@
       </h3>
     </div>
   </div>
-  <MyButtonVue />
 </template>
 
 <script lang="ts" setup>
 import { getBanners } from "~/api/common/banner";
-import {
-  toRefs,
-  onMounted,
-  ref,
-  defineAsyncComponent,
-  computed,
-  watch,
-} from "vue";
+import { onMounted, ref, defineAsyncComponent, computed } from "vue";
 import MyButtonVue from "~/components/MyButton.vue";
 import type { GetBannerAPIResponse } from "~/api/common/banner";
 import { rebuildAssetURL } from "~/helpers/url";
-import { selectedCityHomeDescription, selectedCity } from "~/stores/city";
+import useCityStore from "~/stores/city";
 import useConfigStore from "~/stores/config";
 import { formatThousand } from "~/helpers/string";
 import { storeToRefs } from "pinia";
 const configStore = useConfigStore();
+const cityStore = useCityStore();
 const { isLoading, backendConfig } = storeToRefs(configStore);
-
-const props = defineProps({
-  totalCover: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: String,
-    required: true,
-  },
-  cityId: {
-    type: [String, Number],
-    required: true,
-  },
-});
-
-const { totalCover, cityId } = toRefs(props);
-const title = selectedCityHomeDescription.value;
-
+const title = computed(() => cityStore.selectedCityHomeDescription);
 const banner = ref<GetBannerAPIResponse[]>([]);
+const showedTotalCover = computed(() => {
+  return formatThousand(backendConfig.value.totalCovers);
+});
 const image = computed(() => {
   if (banner.value.length) {
-    return rebuildAssetURL(banner.value[0].desktopRetinaVersions[0].url);
+    return rebuildAssetURL(banner.value[0].desktopVersions[0].url);
   }
   return null;
 });
 
-const showedTotalCover = ref(totalCover.value);
-
-onMounted(async () => {
-  watch(isLoading, (newVal) => {
-    if (newVal === false) {
-      showedTotalCover.value = formatThousand(backendConfig.value.totalCovers);
-    }
-  });
-  const { isSuccess, message, data } = await getBanners(cityId.value);
-  if (data?.length && isSuccess) {
+async function fetchBanners() {
+  const { isSuccess, message, data } = await getBanners(
+    cityStore.selectedCityId
+  );
+  if (data && isSuccess) {
     banner.value = data.filter((promotion) => {
       if (promotion.locations && promotion.locations.length) {
         const isLocationPromotion = promotion.locations.filter((location) =>
@@ -90,6 +63,10 @@ onMounted(async () => {
       return false;
     });
   }
+}
+
+onMounted(async () => {
+  fetchBanners();
 });
 </script>
 <script lang="ts">

@@ -2,16 +2,36 @@ import { isClient } from "~/helpers/env";
 import { Notyf } from "notyf";
 import "notyf/notyf.min.css";
 
-type ToastInstance = Notyf | undefined;
+type NotyfInstance = Notyf | undefined;
+interface ToastInstance {
+  // eslint-disable-next-line no-unused-vars
+  success: (text: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  info: (text: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  warning: (text: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  error: (text: string) => void;
+}
 
-let toast = undefined as ToastInstance;
-let successToast = (text: string) => {};
-let infoToast = (text: string) => {};
-let warningToast = (text: string) => {};
-let errorToast = (text: string) => {};
+let notyf = undefined as NotyfInstance;
+const toast: ToastInstance = {
+  success: function (): void {
+    throw new Error("Function not implemented.");
+  },
+  info: function (): void {
+    throw new Error("Function not implemented.");
+  },
+  warning: function (): void {
+    throw new Error("Function not implemented.");
+  },
+  error: function (): void {
+    throw new Error("Function not implemented.");
+  },
+};
 if (isClient) {
   // Create an instance of Notyf
-  toast = new Notyf({
+  notyf = new Notyf({
     position: { x: "right", y: "top" },
     types: [
       {
@@ -27,51 +47,35 @@ if (isClient) {
     ],
   });
 
-  successToast = function (text: string) {
-    if (!toast) {
-      return;
-    }
-    toast.dismissAll();
+  toast.success = function (text: string) {
+    notyf?.dismissAll();
     const parsedText = typeof text === "string" ? text : "";
     if (parsedText.length) {
-      toast.success(text);
+      notyf?.success(text);
     }
   };
-
-  errorToast = function (text: string) {
-    if (!toast) {
-      return;
-    }
-    toast.dismissAll();
+  toast.error = (text: string) => {
+    notyf?.dismissAll();
     const parsedText = typeof text === "string" ? text : "";
     if (parsedText.length) {
-      toast.error(text);
+      notyf?.error(text);
     }
   };
-
-  infoToast = function (text: string) {
-    if (!toast) {
-      return;
-    }
-    toast.dismissAll();
+  toast.info = (text: string) => {
+    notyf?.dismissAll();
     const parsedText = typeof text === "string" ? text : "";
-
     if (parsedText.length) {
-      toast.open({
+      notyf?.open({
         type: "info",
         message: text,
       });
     }
   };
-
-  warningToast = function (text: string) {
-    if (!toast) {
-      return;
-    }
-    toast.dismissAll();
+  toast.warning = (text: string) => {
+    notyf?.dismissAll();
     const parsedText = typeof text === "string" ? text : "";
     if (parsedText.length) {
-      toast.open({
+      notyf?.open({
         type: "warning",
         message: text,
       });
@@ -79,4 +83,4 @@ if (isClient) {
   };
 }
 
-export { successToast, warningToast, infoToast, errorToast };
+export default toast;

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative rounded-b-lg shadow-md">
     <HhImage
       :sources="image.sources"
       :src="image.src"
@@ -7,29 +7,84 @@
       alt="restaurant image"
       :width="image.width || defaultImgSize.width"
       :height="image.height || defaultImgSize.height"
-      class="w-full bg-gray-300 rounded-lg restaurant-image"
+      class="w-full bg-gray-300 rounded-t-lg restaurant-image"
     />
-    <div class="mt-2">
-      <div class="mb-2 text-sm font-bold text-gray-700 truncate">
-        {{ name }}
-      </div>
 
-      <div class="flex items-center mb-2">
-        <div class="flex items-center mr-2 text-gray-500">
-          <IconStar class="icon" />
-          {{ reviewsScore }}
+    <div class="relative" :class="[isImageLeft ? 'lg:w-full w-1/2' : '']">
+      <a :href="link" @click.prevent="$emit('on-click')">
+        <!-- restaurant info -->
+        <div class="flex p-2 pb-0 restaurant-info">
+          <div class="flex flex-col flex-grow w-full">
+            <!-- restaurant name -->
+            <span
+              class="mb-4 font-bold truncate text-dark lg:text-20-24 text-16-20 lg:font-black restaurant-name"
+            >
+              {{ name }}
+            </span>
+          </div>
         </div>
-        <div class="flex items-center text-gray-500">
-          <IconFork class="icon" />
-          {{ cuisine }}
+        <div class="flex p-2 pt-0 pb-0">
+          <div class="flex flex-col flex-grow w-full">
+            <div class="flex items-center mb-4">
+              <span
+                class="lg:block hidden truncate text-dark-grey text-20-24 font-normal mr-2.5 cuisine-label lg:max-w-[50%]"
+                >{{ cuisine }}</span
+              >
+              <span
+                class="lg:block hidden mr-2.5 w-[3px] h-[3px] flex-shrink-0"
+              >
+                <IconDotGrey class="bg-gray-500" />
+              </span>
+              <span v-if="isNotNew" class="lg:mr-2.5 mr-1 icon-star">
+                <IconStar class="w-[18px] text-[#FFDD46]" />
+              </span>
+              <span
+                :class="[
+                  isNotNew
+                    ? 'mr-1 font-normal lg:mr-2.5 text-dark-grey lg:text-20-24 text-14-18 cuisine-label uppercase'
+                    : 'mr-1 font-bold lg:mr-2.5 text-white lg:text-lg text-xs cuisine-label uppercase bg-dark-grey rounded px-2 py-0.5 badge-grey',
+                ]"
+                >{{ isNotNew ? reviewsScore : $t("new") }}
+              </span>
+              <div v-if="true">
+                <div v-if="totalLocation" class="flex items-center">
+                  <span
+                    class="lg:block hidden mr-2.5 w-[3px] h-[3px] flex-shrink-0"
+                  >
+                    <IconDotGrey class="bg-gray-500" />
+                  </span>
+                  <span class="mr-1 lg:mr-2 icon-map"
+                    ><IconMapMarker class="w-[18px] h-[18px] text-red-dark"
+                  /></span>
+                  <span
+                    class="overflow-hidden truncate lg:max-w-[75%] text-dark-grey lg:text-20-24 text-14-18 cuisine-label"
+                    >{{ totalLocation }} branches</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div class="flex items-center text-red-500">
-        <IconPeople class="icon" />
-        {{ priceLabel }}
-      </div>
+        <div class="flex p-2 pt-0 pb-0">
+          <div class="flex flex-col flex-grow w-full">
+            <div class="flex items-center mb-4">
+              <span
+                v-if="acceptVoucher"
+                class="lg:mr-1.5 mr-1 icon-gift w-[25px] text-red-dark"
+                ><IconGiftDiscount
+              /></span>
+              <span class="lg:mr-1.5 mr-1 icon-tag"
+                ><IconTagLabel class="w-[18px] text-red-dark"
+              /></span>
+              <span class="font-black text-red-dark lg:text-20-24 text-14-18"
+                >From {{ moneyFormat(price) }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </a>
     </div>
+
     <div
       class="absolute left-[10px] top-[10px] bg-black text-white rounded-lg text-xs p-2"
     >
@@ -39,10 +94,13 @@
 </template>
 
 <script lang="ts" setup>
+import HhImage from "~/components/HhImage.vue";
 import type { SrcSet } from "~/components/HhImage.vue";
-import IconStar from "~/components/icons/IconStar.vue";
-import IconFork from "~/components/icons/IconFork.vue";
-import IconPeople from "~/components/icons/IconPeople.vue";
+import IconStar from "~icons/hh-icons/icon-star";
+import IconDotGrey from "~icons/hh-icons/icon-dot-grey";
+import IconTagLabel from "~icons/hh-icons/icon-tag-label";
+import IconMapMarker from "~icons/hh-icons/icon-map-marker";
+import IconGiftDiscount from "~icons/hh-icons/icon-gift-discount";
 import { moneyFormat } from "~/helpers/string";
 import { pricingTypeLabel } from "~/helpers/pack";
 import { useI18n } from "vue-i18n";
@@ -59,7 +117,9 @@ export interface Props {
   };
   customText?: string;
   isAds?: boolean;
+  isImageLeft?: boolean;
   name: string;
+  acceptVoucher?: boolean;
   price: number;
   pricingType: string;
   isDineIn?: boolean;
@@ -75,7 +135,7 @@ export interface Props {
 }
 
 const props = defineProps<Props>();
-const { totalLocation, location, price, pricingType } = props;
+const { totalLocation, location, price, pricingType, reviewsCount } = props;
 const { t } = useI18n({ useScope: "global" });
 
 const defaultImgSize = {
@@ -86,7 +146,10 @@ const defaultImgSize = {
 const priceLabel = `${moneyFormat(price)} ${t(pricingTypeLabel(pricingType))}`;
 
 const locationLabel = totalLocation > 0 ? `${totalLocation} Branch` : location;
-const HhImage = defineAsyncComponent(() => import("~/components/HhImage.vue"));
+
+const isNotNew = computed(() => {
+  return reviewsCount >= 5;
+});
 </script>
 <script lang="ts">
 export default {

@@ -1,15 +1,7 @@
 <template>
-  <div>
-    {{ configStore.backendConfig }}
-  </div>
+  <HomePage />
 </template>
 
 <script lang="ts" setup>
-import useConfigStore from "~/stores/config";
-import { onMounted } from "#imports";
-const configStore = useConfigStore();
-await configStore.getConfig();
-onMounted(() => {
-  console.log("index mounted");
-});
+import HomePage from "~/partial/home/HomePage.vue";
 </script>
