@@ -1,5 +1,8 @@
 module.exports = {
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: false,
+  },
   content: [
     "components_pages/**/*.vue",
     "section/**/*.vue",
