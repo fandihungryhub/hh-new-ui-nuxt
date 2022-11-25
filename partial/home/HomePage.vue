@@ -26,6 +26,7 @@ import HomeRestaurantSlider from "~~/partial/home/HomeRestaurantSlider.vue";
 import iconRightArrow from "~icons/hh-icons/icon-right-arrow";
 const configStore = useConfigStore();
 await configStore.getConfig();
+
 onMounted(() => {
   getAllGroupLanding();
   console.log("index mounted");
